@@ -1,6 +1,8 @@
 ## 14/07/2026 — Descomposición del MVP en HUs
+
 **Para qué:** derivar mis historias de usuario.
 **Prompt:**
+
 ```
 [CONTEXTO]
 Construir una aplicación web que permita buscar canciones en un catálogo real (API de iTunes) y organizarlas en playlists personales que sobreviven al recargar la página. La app calcula la duración total de cada playlist y muestra estadísticas de tu música.
@@ -41,11 +43,14 @@ Para cada historia incluye:
 - Cada historia debe representar una unidad funcional que pueda completarse de forma independiente.
 - Evita historias demasiado grandes; si una funcionalidad es extensa, divídela en varias historias.
 ```
+
 **Resultado:** Archivo .md como base de mis 11 HUs; ajusté criterios y alcance a mano.
 
 ## 14/07/2026 — Planificación de los sprints
+
 **Para qué:** Distribuirlas mis HUs en Sprint 1 y Sprint 2 .
 **Prompt:**
+
 ```
 Estas son mis 11 historias finales:
 ## Sprint 1 — Funcionalidad base: buscar, crear y guardar
@@ -222,11 +227,14 @@ y envíame la respuesta en un archivo .md:
 ## Mi reto técnico principal
 La HU que más me intimida es ______ porque ______.
 ```
+
 **Resultado:** Archivo .md con la distribución de sprints, dependencias y el reto técnico principal.
 
 ## 14/07/2026 — Creación del README.md
+
 **Para qué:** Crear el contenido del README.md del proyecto.
 **Prompt:**
+
 ```
 Crea un README.MD con una línea de descripción del proyecto, stack tecnológico, las HUs, y cómo ejecutar el proyecto localmente y la estructura de archivos.
 Estructura de archivos
@@ -245,4 +253,163 @@ mi-setlist/
 ├── README.md              # Documentación del proyecto
 └── .gitignore
 ```
+
 **Resultado:** Archivo README.md
+
+## 15/07/2026 — Creación del wireframe en formato ASCII
+
+**Para qué:** Tener un bosquejo base del wireframe de la app.
+**Prompt:**
+
+```
+crea un wireframe en ASCII de la app
+```
+
+**Resultado:**
+
+```
+Aquí tienes el wireframe en ASCII de las pantallas principales de la app:
+┌──────────────────────────────────────────────────────────────────┐
+│  🎵 mi-setlist                                                    │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                    │
+│  BUSCAR CANCIONES                                                 │
+│  ┌────────────────────────────────────────────┐  ┌─────────────┐ │
+│  │ Buscar por artista o título...              │  │   Buscar    │ │
+│  └────────────────────────────────────────────┘  └─────────────┘ │
+│                                                                    │
+│  [ ⏳ Buscando... ]  /  [ ⚠ Error al conectar con la API ]        │
+│  /  [ 🔍 No se encontraron resultados ]                           │
+│                                                                    │
+│  RESULTADOS                                                       │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │ [🖼]  Bohemian Rhapsody          3:45      [+ Agregar a ▾]  │  │
+│  │       Queen                                                 │  │
+│  ├────────────────────────────────────────────────────────────┤  │
+│  │ [🖼]  Yesterday                  2:05      [+ Agregar a ▾]  │  │
+│  │       The Beatles                                           │  │
+│  ├────────────────────────────────────────────────────────────┤  │
+│  │ [🖼]  Billie Jean                4:54      [+ Agregar a ▾]  │  │
+│  │       Michael Jackson                                       │  │
+│  └────────────────────────────────────────────────────────────┘  │
+│                                                                    │
+├──────────────────────────────────────────────────────────────────┤
+│  MIS PLAYLISTS                              [ + Nueva playlist ]  │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │ ▸ Road trip          12 canciones   · 45 min       [🗑]     │  │
+│  │ ▸ Ensayo sábado       5 canciones   · 18 min       [🗑]     │  │
+│  │ ▸ Focus               0 canciones   · 0 min        [🗑]     │  │
+│  └────────────────────────────────────────────────────────────┘  │
+│  (si no hay playlists: "Todavía no creaste ninguna playlist 🎶")  │
+└──────────────────────────────────────────────────────────────────┘
+
+Vista de detalle de una playlist:
+┌──────────────────────────────────────────────────────────────────┐
+│  ← Volver a mis playlists                                        │
+├──────────────────────────────────────────────────────────────────┤
+│  ROAD TRIP                                                        │
+│                                                                    │
+│  ⏱ Duración total: 1 h 23 min      🎵 Canciones: 12               │
+│  🎼 Género más frecuente: Rock     🎤 Artista más repetido: Queen  │
+│                                                                    │
+│  Ordenar por: [ Recientes ▾ ]  [ Antiguas ]  [ A-Z ]              │
+│                                                                    │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │ [🖼]  Bohemian Rhapsody                                     │  │
+│  │       Queen · 3:45 · Agregada el 14/07/2026        [ ✕ ]    │  │
+│  ├────────────────────────────────────────────────────────────┤  │
+│  │ [🖼]  Yesterday                                             │  │
+│  │       The Beatles · 2:05 · Agregada el 12/07/2026  [ ✕ ]    │  │
+│  ├────────────────────────────────────────────────────────────┤  │
+│  │ [🖼]  Billie Jean                                           │  │
+│  │       Michael Jackson · 4:54 · Agregada el 10/07/2026 [✕]  │  │
+│  └────────────────────────────────────────────────────────────┘  │
+│  (si está vacía: "Esta playlist todavía no tiene canciones")     │
+└──────────────────────────────────────────────────────────────────┘
+
+Modal de confirmación (reutilizable para quitar canción o eliminar playlist):
+                ┌───────────────────────────────────┐
+                │  ⚠  Confirmar eliminación          │
+                ├───────────────────────────────────┤
+                │                                     │
+                │  ¿Seguro que quieres eliminar        │
+                │  "Road trip" y todas sus            │
+                │  canciones?                         │
+                │                                     │
+                │  Esta acción no se puede deshacer.  │
+                │                                     │
+                │   [ Cancelar ]     [ Eliminar ]     │
+                └───────────────────────────────────┘
+```
+
+## 15/07/2026 — Creación del wireframe en formato ASCII
+
+**Para qué:** Tener un bosquejo del wireframe del formulario de creación de playlist.
+**Prompt:**
+
+```
+¿este botón que mostraría [ + Nueva playlist ]?
+```
+
+**Resultado:**
+
+```
+Buena pregunta — no lo mostré en el wireframe anterior, pero según la HU-03 (crear playlist con nombre propio), al hacer clic en [ + Nueva playlist ] debería aparecer un formulario simple para pedir el nombre. Podría ser un modal (mismo patrón que el de confirmación) o un campo inline que se despliega justo debajo del botón. Con modal quedaría así:
+                 ┌───────────────────────────────────┐
+                 │  🎵  Nueva playlist                │
+                 ├───────────────────────────────────┤
+                 │                                     │
+                 │  Nombre de la playlist:             │
+                 │  ┌───────────────────────────────┐ │
+                 │  │ Ej: Road trip                  │ │
+                 │  └───────────────────────────────┘ │
+                 │                                     │
+                 │  ⚠ El nombre es obligatorio         │
+                 │    (solo aparece si intentás        │
+                 │     crear sin escribir nada)         │
+                 │                                     │
+                 │   [ Cancelar ]        [ Crear ]     │
+                 └───────────────────────────────────┘
+
+Esto cumple los criterios de aceptación de HU-03: pide un nombre, no permite crear sin nombre (muestra el aviso), y al confirmar la playlist aparece de inmediato en la lista.
+```
+
+## 15/07/2026 — Creación del wireframe en formato ASCII
+
+**Para qué:** Tener un bosquejo del wireframe del selector de playlist en cada canción.
+**Prompt:**
+
+```
+¿este selector que mostraría [+ Agregar a ▾]?
+```
+
+**Resultado:**
+
+```
+No lo mostré expandido tampoco — según HU-04 (agregar canción desde resultados a una playlist), al hacer clic debería desplegarse la lista de playlists existentes para elegir el destino. Así se vería:
+Caso normal (ya tengo playlists creadas):
+┌────────────────────────────────────────────────────────────┐
+│ [🖼]  Bohemian Rhapsody          3:45      [+ Agregar a ▾]  │
+│       Queen                                 ┌─────────────┐│
+│                                              │ Road trip    ││
+│                                              │ Ensayo sábado││
+│                                              │ Focus        ││
+│                                              └─────────────┘│
+└────────────────────────────────────────────────────────────┘
+
+Al elegir una opción (ej. "Road trip"), la canción se agrega y aparece una confirmación breve, por ejemplo:
+✓ "Bohemian Rhapsody" agregada a Road trip
+
+Caso sin playlists creadas todavía (criterio de aceptación de HU-04):
+┌────────────────────────────────────────────────────────────┐
+│ [🖼]  Bohemian Rhapsody          3:45      [+ Agregar a ▾]  │
+│       Queen                                 ┌─────────────┐│
+│                                              │ Todavía no    ││
+│                                              │ tienes         ││
+│                                              │ playlists.    ││
+│                                              │ [+ Crear una] ││
+│                                              └─────────────┘│
+└────────────────────────────────────────────────────────────┘
+
+Al hacer clic en "+ Crear una" se abriría el modal de "Nueva playlist" que vimos antes, y una vez creada, podría continuar el flujo de agregar la canción directamente ahí (o el usuario repite la acción de agregar).
+```
