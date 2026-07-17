@@ -4,14 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <title>Mi Setlist</title>
   </head>
   <body>
-    <header>
-      <h1>🎵 Mi Setlist</h1>
+    <header class="masthead">
+      <div class="eq-masthead" id="eq-masthead" aria-hidden="true">
+        <span class="eq-barra"></span>
+        <span class="eq-barra"></span>
+        <span class="eq-barra"></span>
+        <span class="eq-barra"></span>
+      </div>
+      <h1>mi-setlist</h1>
     </header>
-    <section id="seccion-busqueda" aria-label="Buscar canciones">
-      <h2>Buscar canciones</h2>
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button
+        type="button"
+        id="tab-busqueda"
+        class="tab-btn"
+        role="tab"
+        aria-selected="true"
+        aria-controls="seccion-busqueda"
+      >
+        🔍 Buscar
+      </button>
+      <button
+        type="button"
+        id="tab-playlists"
+        class="tab-btn"
+        role="tab"
+        aria-selected="false"
+        aria-controls="seccion-playlists"
+      >
+        🎵 Mis playlists
+      </button>
+    </nav>
+
+    <section
+      id="seccion-busqueda"
+      aria-label="Buscar canciones"
+      role="tabpanel"
+    >
+      <h2 class="sr-only">Buscar canciones</h2>
       <form id="form-busqueda">
         <label for="input-busqueda" class="sr-only">Artista o título</label>
         <input
@@ -28,6 +67,49 @@
 
       <ul id="lista-resultados" aria-label="Resultados de búsqueda"></ul>
     </section>
+
+    <section
+      id="seccion-playlists"
+      aria-label="Mis playlists"
+      role="tabpanel"
+      hidden
+    >
+      <div class="playlists-header">
+        <h2 class="sr-only">Mis playlists</h2>
+        <button type="button" id="btn-nueva-playlist">+ Nueva playlist</button>
+      </div>
+      <ul id="lista-playlists" aria-label="Lista de playlists"></ul>
+    </section>
+
+    <footer class="pie-pagina">
+      <p>&copy; 2026 Gefferson Casasola. Todos los derechos reservados.</p>
+    </footer>
+
+    <div id="overlay-modal" class="overlay oculto">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-modal"
+      >
+        <h3 id="titulo-modal">🎵 Nueva playlist</h3>
+        <form id="form-nueva-playlist">
+          <label for="input-nombre-playlist">Nombre de la playlist:</label>
+          <input
+            type="text"
+            id="input-nombre-playlist"
+            name="nombre"
+            placeholder="Ej: Road trip"
+            autocomplete="off"
+          />
+          <p id="error-nueva-playlist" role="alert"></p>
+          <div class="modal-acciones">
+            <button type="button" id="btn-cancelar-playlist">Cancelar</button>
+            <button type="submit" id="btn-crear-playlist">Crear</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </body>
   <script type="module" src="./js/app.js"></script>
 </html>

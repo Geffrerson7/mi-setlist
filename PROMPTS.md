@@ -266,81 +266,7 @@ crea un wireframe en ASCII de la app
 ```
 
 **Resultado:**
-
-```
-Aquí tienes el wireframe en ASCII de las pantallas principales de la app:
-┌──────────────────────────────────────────────────────────────────┐
-│  🎵 mi-setlist                                                    │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                    │
-│  BUSCAR CANCIONES                                                 │
-│  ┌────────────────────────────────────────────┐  ┌─────────────┐ │
-│  │ Buscar por artista o título...              │  │   Buscar    │ │
-│  └────────────────────────────────────────────┘  └─────────────┘ │
-│                                                                    │
-│  [ ⏳ Buscando... ]  /  [ ⚠ Error al conectar con la API ]        │
-│  /  [ 🔍 No se encontraron resultados ]                           │
-│                                                                    │
-│  RESULTADOS                                                       │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │ [🖼]  Bohemian Rhapsody          3:45      [+ Agregar a ▾]  │  │
-│  │       Queen                                                 │  │
-│  ├────────────────────────────────────────────────────────────┤  │
-│  │ [🖼]  Yesterday                  2:05      [+ Agregar a ▾]  │  │
-│  │       The Beatles                                           │  │
-│  ├────────────────────────────────────────────────────────────┤  │
-│  │ [🖼]  Billie Jean                4:54      [+ Agregar a ▾]  │  │
-│  │       Michael Jackson                                       │  │
-│  └────────────────────────────────────────────────────────────┘  │
-│                                                                    │
-├──────────────────────────────────────────────────────────────────┤
-│  MIS PLAYLISTS                              [ + Nueva playlist ]  │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │ ▸ Road trip          12 canciones   · 45 min       [🗑]     │  │
-│  │ ▸ Ensayo sábado       5 canciones   · 18 min       [🗑]     │  │
-│  │ ▸ Focus               0 canciones   · 0 min        [🗑]     │  │
-│  └────────────────────────────────────────────────────────────┘  │
-│  (si no hay playlists: "Todavía no creaste ninguna playlist 🎶")  │
-└──────────────────────────────────────────────────────────────────┘
-
-Vista de detalle de una playlist:
-┌──────────────────────────────────────────────────────────────────┐
-│  ← Volver a mis playlists                                        │
-├──────────────────────────────────────────────────────────────────┤
-│  ROAD TRIP                                                        │
-│                                                                    │
-│  ⏱ Duración total: 1 h 23 min      🎵 Canciones: 12               │
-│  🎼 Género más frecuente: Rock     🎤 Artista más repetido: Queen  │
-│                                                                    │
-│  Ordenar por: [ Recientes ▾ ]  [ Antiguas ]  [ A-Z ]              │
-│                                                                    │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │ [🖼]  Bohemian Rhapsody                                     │  │
-│  │       Queen · 3:45 · Agregada el 14/07/2026        [ ✕ ]    │  │
-│  ├────────────────────────────────────────────────────────────┤  │
-│  │ [🖼]  Yesterday                                             │  │
-│  │       The Beatles · 2:05 · Agregada el 12/07/2026  [ ✕ ]    │  │
-│  ├────────────────────────────────────────────────────────────┤  │
-│  │ [🖼]  Billie Jean                                           │  │
-│  │       Michael Jackson · 4:54 · Agregada el 10/07/2026 [✕]  │  │
-│  └────────────────────────────────────────────────────────────┘  │
-│  (si está vacía: "Esta playlist todavía no tiene canciones")     │
-└──────────────────────────────────────────────────────────────────┘
-
-Modal de confirmación (reutilizable para quitar canción o eliminar playlist):
-                ┌───────────────────────────────────┐
-                │  ⚠  Confirmar eliminación          │
-                ├───────────────────────────────────┤
-                │                                     │
-                │  ¿Seguro que quieres eliminar        │
-                │  "Road trip" y todas sus            │
-                │  canciones?                         │
-                │                                     │
-                │  Esta acción no se puede deshacer.  │
-                │                                     │
-                │   [ Cancelar ]     [ Eliminar ]     │
-                └───────────────────────────────────┘
-```
+Un archivo .md con los wireframe de la app en código ASCII
 
 ## 15/07/2026 — Creación del wireframe en formato ASCII
 
@@ -352,27 +278,7 @@ Modal de confirmación (reutilizable para quitar canción o eliminar playlist):
 ```
 
 **Resultado:**
-
-```
-Buena pregunta — no lo mostré en el wireframe anterior, pero según la HU-03 (crear playlist con nombre propio), al hacer clic en [ + Nueva playlist ] debería aparecer un formulario simple para pedir el nombre. Podría ser un modal (mismo patrón que el de confirmación) o un campo inline que se despliega justo debajo del botón. Con modal quedaría así:
-                 ┌───────────────────────────────────┐
-                 │  🎵  Nueva playlist                │
-                 ├───────────────────────────────────┤
-                 │                                     │
-                 │  Nombre de la playlist:             │
-                 │  ┌───────────────────────────────┐ │
-                 │  │ Ej: Road trip                  │ │
-                 │  └───────────────────────────────┘ │
-                 │                                     │
-                 │  ⚠ El nombre es obligatorio         │
-                 │    (solo aparece si intentás        │
-                 │     crear sin escribir nada)         │
-                 │                                     │
-                 │   [ Cancelar ]        [ Crear ]     │
-                 └───────────────────────────────────┘
-
-Esto cumple los criterios de aceptación de HU-03: pide un nombre, no permite crear sin nombre (muestra el aviso), y al confirmar la playlist aparece de inmediato en la lista.
-```
+El wireframe de la app en código ASCII del formulario de creación de playlist.
 
 ## 15/07/2026 — Creación del wireframe en formato ASCII
 
@@ -384,32 +290,158 @@ Esto cumple los criterios de aceptación de HU-03: pide un nombre, no permite cr
 ```
 
 **Resultado:**
+El wireframe de la app en código ASCII del selector de playlist en cada canción.
+
+## 16/07/2026 — Implementación HU1
+
+**Para qué:** Implementar la HU1.
+**Prompt:**
 
 ```
-No lo mostré expandido tampoco — según HU-04 (agregar canción desde resultados a una playlist), al hacer clic debería desplegarse la lista de playlists existentes para elegir el destino. Así se vería:
-Caso normal (ya tengo playlists creadas):
-┌────────────────────────────────────────────────────────────┐
-│ [🖼]  Bohemian Rhapsody          3:45      [+ Agregar a ▾]  │
-│       Queen                                 ┌─────────────┐│
-│                                              │ Road trip    ││
-│                                              │ Ensayo sábado││
-│                                              │ Focus        ││
-│                                              └─────────────┘│
-└────────────────────────────────────────────────────────────┘
+CONTEXTO:
+Esta es la estructura de archivos del proyecto:
+mi-setlist/
+├── index.html
+├── css/styles.css
+├── js/
+│   ├── app.js             # Punto de entrada, inicialización
+│   ├── models/Cancion.js  # Clase que modela una canción
+│   ├── state.js           # Estado central (playlists)
+│   ├── storage.js         # localStorage (guardar/cargar/limpiar)
+│   ├── api.js             # fetch a la API de iTunes
+│   └── ui.js              # render + eventos del DOM
+├── PROMPTS.md             # Registro de trabajo con la IA
+├── README.md              # Documentación del proyecto
+└── .gitignore
 
-Al elegir una opción (ej. "Road trip"), la canción se agrega y aparece una confirmación breve, por ejemplo:
-✓ "Bohemian Rhapsody" agregada a Road trip
+TAREA: Implementemos JUNTOS esta historia:
+HU-01: Buscar canciones en el catálogo
+**Sprint:** 1
+**Prioridad:** Alta
 
-Caso sin playlists creadas todavía (criterio de aceptación de HU-04):
-┌────────────────────────────────────────────────────────────┐
-│ [🖼]  Bohemian Rhapsody          3:45      [+ Agregar a ▾]  │
-│       Queen                                 ┌─────────────┐│
-│                                              │ Todavía no    ││
-│                                              │ tienes         ││
-│                                              │ playlists.    ││
-│                                              │ [+ Crear una] ││
-│                                              └─────────────┘│
-└────────────────────────────────────────────────────────────┘
+Como usuario, quiero buscar canciones por artista o título, para encontrar música real que luego pueda agregar a mis playlists.
 
-Al hacer clic en "+ Crear una" se abriría el modal de "Nueva playlist" que vimos antes, y una vez creada, podría continuar el flujo de agregar la canción directamente ahí (o el usuario repite la acción de agregar).
+**Criterios de aceptación:**
+- Existe un campo de búsqueda donde puedo escribir un artista o título de canción.
+- Al ejecutar la búsqueda, se muestra una lista de resultados con carátula, nombre de la canción, artista y duración.
+- Puedo realizar una nueva búsqueda tantas veces como quiera sin recargar la página.
+- Si no escribo ningún texto, la búsqueda no se ejecuta o se me indica que debo ingresar un término.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no
+te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Cómo se dispara la búsqueda?
+A: Solo al hacer clic en 'Buscar' o presionar Enter
+
+Q: ¿Cuántos resultados como máximo mostrar por búsqueda?
+A: 10
+
+Q: Si el campo está vacío y el usuario intenta buscar, ¿qué prefieres?
+A: Bloquear el envío (botón deshabilitado, no pasa nada)
 ```
+
+**Resultado:**
+
+1. js/models/Cancion.js — el modelo de una canción
+2. js/api.js — la llamada a iTunes
+3. js/state.js — el estado central
+4. index.html — el formulario de búsqueda y el contenedor de resultados
+5. css/styles.css — estilos mínimos para esta sección
+6. js/ui.js — render y eventos del formulario
+7. js/app.js — el punto de entrada que conecta todo
+
+## 16/07/2026 — Implementación HU2
+
+**Para qué:** Implementar la HU2.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-02: Comunicar el estado de la búsqueda
+**Sprint:** 1
+**Prioridad:** Alta
+
+Como usuario, quiero saber si la búsqueda está en curso, si falló o si no hay resultados, para entender qué está pasando en cada momento.
+
+**Criterios de aceptación:**
+- Mientras se realiza la búsqueda, se muestra un indicador de carga visible.
+- Si la búsqueda no puede completarse, se muestra un mensaje de error claro y comprensible.
+- Si la búsqueda se completa pero no hay canciones que coincidan, se muestra un mensaje amigable indicando que no hay resultados.
+- El indicador de carga desaparece apenas se muestran los resultados o el mensaje correspondiente.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: El indicador de carga hoy es solo texto ('⏳ Buscando...'). ¿Querés algo más visual (spinner animado con CSS) o el texto es suficiente?
+A: Agregar un spinner animado además del texto
+
+Q: Si la búsqueda falla, ¿el mensaje de error debería ser siempre el mismo texto genérico, o diferenciar según el tipo de falla (sin conexión vs. error del servidor)?
+A: Diferenciar el mensaje según el tipo de error
+
+Q: Si el usuario dispara una nueva búsqueda antes de que la anterior termine (por ej. busca rápido dos veces), ¿qué debería pasar?
+A: Ignorar la respuesta vieja si llega tarde, solo importa la última búsqueda
+```
+
+**Resultado:**
+
+1. js/api.js — diferenciar el tipo de error
+2. js/app.js — ignorar respuestas viejas (condición de carrera)
+3. js/ui.js — spinner en el mensaje de carga
+4. css/styles.css — animación del spinner
+
+## 16/07/2026 — Implementación HU3
+
+**Para qué:** Implementar la HU3.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-03: Crear una playlist nueva
+**Sprint:** 1
+**Prioridad:** Alta
+
+Como usuario, quiero crear playlists con un nombre propio, para organizar mi música según mis propios criterios.
+
+**Criterios de aceptación:**
+- Existe una opción visible para crear una playlist nueva.
+- Al crear una playlist debo asignarle un nombre.
+- La playlist creada aparece inmediatamente en mi lista de playlists.
+- No puedo crear una playlist sin nombre; se me indica que el nombre es obligatorio.
+- Puedo crear varias playlists con nombres distintos.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Cómo preferís el formulario para crear playlist?
+A: Modal (como el de confirmación de eliminar)
+
+Q: ¿Se permiten dos playlists con el mismo nombre (ej. dos 'Favoritos')?
+A: No, bloquear si ya existe una playlist con ese nombre
+
+Q: ¿Dónde debería aparecer la playlist recién creada en la lista 'Mis playlists'?
+A: Arriba de todas (la más nueva primero)
+```
+
+**Resultado:**
+
+1. js/state.js — estado del modal + acción crearPlaylist
+2. index.html — sección de playlists + markup del modal
+3. css/styles.css — estilos de playlists y modal
+4. js/ui.js — render de playlists + render/eventos del modal
+5. js/app.js — conectar el modal
