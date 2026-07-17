@@ -3,11 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
     <title>Mi Setlist</title>
   </head>
   <body>
-    <h1>🎵 Mi Setlist</h1>
-    <p id="app"></p>
-    <script type="module" src="js/app.js"></script>
+    <header>
+      <h1>🎵 Mi Setlist</h1>
+    </header>
+    <section id="seccion-busqueda" aria-label="Buscar canciones">
+      <h2>Buscar canciones</h2>
+      <form id="form-busqueda">
+        <label for="input-busqueda" class="sr-only">Artista o título</label>
+        <input
+          type="text"
+          id="input-busqueda"
+          name="busqueda"
+          placeholder="Buscar por artista o título..."
+          autocomplete="off"
+        />
+        <button type="submit" id="btn-buscar">Buscar</button>
+      </form>
+
+      <p id="mensaje-busqueda" role="status"></p>
+
+      <ul id="lista-resultados" aria-label="Resultados de búsqueda"></ul>
+    </section>
   </body>
+  <script type="module" src="./js/app.js"></script>
 </html>

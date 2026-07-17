@@ -1,0 +1,156 @@
+/* === Reset === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === Variables globales === */
+:root {
+  --color-fondo: #f7f7f9;
+  --color-texto: #1a1a1a;
+  --color-texto-suave: #666;
+  --color-borde: #ddd;
+  --color-primario: #4f46e5;
+  --color-primario-hover: #4338ca;
+  --color-error: #b91c1c;
+  --radio-borde: 8px;
+  --fuente-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* === Base === */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+  background-color: var(--color-fondo);
+  line-height: 1.5;
+  padding: 1.5rem;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+/* === Header / Título principal === */
+header {
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* === Sección de búsqueda === */
+#seccion-busqueda {
+  margin-bottom: 2rem;
+}
+
+#form-busqueda {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#input-busqueda {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+#input-busqueda:focus {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
+#btn-buscar {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: #fff;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#btn-buscar:hover:not(:disabled) {
+  background-color: var(--color-primario-hover);
+}
+
+#btn-buscar:disabled {
+  background-color: var(--color-borde);
+  color: var(--color-texto-suave);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* === Mensaje de estado de la búsqueda === */
+#mensaje-busqueda {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: var(--color-texto-suave);
+}
+
+#mensaje-busqueda:has(+ #lista-resultados:empty) {
+  margin-bottom: 0;
+}
+
+/* === Lista de resultados === */
+#lista-resultados {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.resultado-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 0.5rem;
+  background-color: #fff;
+}
+
+.resultado-item img {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.resultado-item strong {
+  font-size: 0.95rem;
+}
+
+.resultado-item small {
+  color: var(--color-texto-suave);
+}
+
+/* === Utilidades === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
