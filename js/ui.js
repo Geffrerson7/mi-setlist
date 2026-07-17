@@ -1,7 +1,7 @@
-const inputBusqueda = document.getElementById('input-busqueda');
-const btnBuscar = document.getElementById('btn-buscar');
-const mensajeBusqueda = document.getElementById('mensaje-busqueda');
-const listaResultados = document.getElementById('lista-resultados');
+const inputBusqueda = document.getElementById("input-busqueda");
+const btnBuscar = document.getElementById("btn-buscar");
+const mensajeBusqueda = document.getElementById("mensaje-busqueda");
+const listaResultados = document.getElementById("lista-resultados");
 
 export function render(estado) {
   renderBotonBuscar();
@@ -15,24 +15,30 @@ function renderBotonBuscar() {
 }
 
 function renderMensajeBusqueda({ status, mensajeError }) {
+  if (status === "loading") {
+    mensajeBusqueda.innerHTML =
+      '<span class="spinner" aria-hidden="true"></span> Buscando...';
+    return;
+  }
+
   const mensajes = {
-    idle: '',
-    loading: '⏳ Buscando...',
+    idle: "",
     error: `⚠ ${mensajeError}`,
-    empty: '🔍 No se encontraron resultados',
-    success: '',
+    empty: "🔍 No se encontraron resultados",
+    success: "",
   };
-  mensajeBusqueda.textContent = mensajes[status] ?? '';
+  mensajeBusqueda.textContent = mensajes[status] ?? "";
 }
 
 function renderResultados(resultados) {
   if (resultados.length === 0) {
-    listaResultados.innerHTML = '';
+    listaResultados.innerHTML = "";
     return;
   }
 
   listaResultados.innerHTML = resultados
-    .map((cancion) => `
+    .map(
+      (cancion) => `
       <li class="resultado-item" data-id="${cancion.id}">
         <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" />
         <div>
@@ -41,20 +47,21 @@ function renderResultados(resultados) {
           <small>${cancion.artista}</small>
         </div>
       </li>
-    `)
-    .join('');
+    `,
+    )
+    .join("");
 }
 
 // Habilita/deshabilita el botón mientras el usuario escribe.
 export function inicializarInputBusqueda() {
-  inputBusqueda.addEventListener('input', renderBotonBuscar);
+  inputBusqueda.addEventListener("input", renderBotonBuscar);
   renderBotonBuscar();
 }
 
 // Delegación de eventos para el submit del formulario.
 export function inicializarFormularioBusqueda(onBuscar) {
-  const form = document.getElementById('form-busqueda');
-  form.addEventListener('submit', (evento) => {
+  const form = document.getElementById("form-busqueda");
+  form.addEventListener("submit", (evento) => {
     evento.preventDefault();
     const termino = inputBusqueda.value.trim();
     if (termino.length === 0) return;

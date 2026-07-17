@@ -6,9 +6,24 @@ const LIMITE_RESULTADOS = 10;
 export async function buscarCanciones(termino) {
   const url = `${BASE_URL}?term=${encodeURIComponent(termino)}&media=music&entity=song&limit=${LIMITE_RESULTADOS}`;
 
-  const respuesta = await fetch(url);
+  let respuesta;
+  try {
+    respuesta = await fetch(url);
+  } catch {
+    // fetch rechaza la promesa cuando no hay conexión, DNS falla, etc.
+    const errorRed = new Error(
+      "No hay conexión a internet. Revisá tu conexión e intentá de nuevo.",
+    );
+    errorRed.tipo = "red";
+    throw errorRed;
+  }
+
   if (!respuesta.ok) {
-    throw new Error("No se pudo conectar con la API de iTunes");
+    const errorServidor = new Error(
+      "El servidor de iTunes no respondió correctamente. Probá de nuevo en unos minutos.",
+    );
+    errorServidor.tipo = "servidor";
+    throw errorServidor;
   }
 
   const datos = await respuesta.json();
