@@ -1,9 +1,19 @@
 import { buscarCanciones } from "./api.js";
-import { getEstado, suscribirse, actualizarEstado } from "./state.js";
+import {
+  getEstado,
+  suscribirse,
+  actualizarEstado,
+  abrirModalNuevaPlaylist,
+  cerrarModal,
+  crearPlaylist,
+  cambiarVista,
+} from "./state.js";
 import {
   render,
   inicializarInputBusqueda,
   inicializarFormularioBusqueda,
+  inicializarModalNuevaPlaylist,
+  inicializarTabs,
 } from "./ui.js";
 
 let idBusquedaActual = 0;
@@ -17,7 +27,7 @@ async function manejarBusqueda(termino) {
 
   try {
     const resultados = await buscarCanciones(termino);
-    if (idDeEstaBusqueda !== idBusquedaActual) return; // llegó tarde, ya hay una búsqueda más nueva
+    if (idDeEstaBusqueda !== idBusquedaActual) return;
 
     actualizarEstado({
       busqueda: {
@@ -27,7 +37,7 @@ async function manejarBusqueda(termino) {
       },
     });
   } catch (error) {
-    if (idDeEstaBusqueda !== idBusquedaActual) return; // llegó tarde, ya hay una búsqueda más nueva
+    if (idDeEstaBusqueda !== idBusquedaActual) return;
 
     actualizarEstado({
       busqueda: {
@@ -43,6 +53,12 @@ function iniciar() {
   suscribirse(render);
   inicializarInputBusqueda();
   inicializarFormularioBusqueda(manejarBusqueda);
+  inicializarModalNuevaPlaylist({
+    onAbrir: abrirModalNuevaPlaylist,
+    onCancelar: cerrarModal,
+    onCrear: crearPlaylist,
+  });
+  inicializarTabs(cambiarVista);
   render(getEstado());
 }
 

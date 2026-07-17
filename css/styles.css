@@ -5,144 +5,681 @@
   box-sizing: border-box;
 }
 
-/* === Variables globales === */
+/* === Design tokens === */
 :root {
-  --color-fondo: #f7f7f9;
-  --color-texto: #1a1a1a;
-  --color-texto-suave: #666;
-  --color-borde: #ddd;
-  --color-primario: #4f46e5;
-  --color-primario-hover: #4338ca;
-  --color-error: #b91c1c;
-  --radio-borde: 8px;
-  --fuente-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-bg: #0b0e14;
+  --color-surface: #151a23;
+  --color-surface-2: #1b2230;
+  --color-text: #e7e9ee;
+  --color-accent: #00e0a8;
+  --color-accent-2: #ff3d6e;
+  --color-muted: #5b6270;
+  --color-line: #232a37;
+
+  /* mismos colores en formato r,g,b para usarlos en rgba() (glows, overlays) */
+  --accent-rgb: 0, 224, 168;
+  --accent-2-rgb: 255, 61, 110;
+
+  --fuente-display: "Unbounded", sans-serif;
+  --fuente-cuerpo: "IBM Plex Sans", sans-serif;
+  --fuente-mono: "JetBrains Mono", monospace;
+
+  --radio: 6px;
+  --transicion: 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* === Base === */
+/* === Base (Mobile First: esto es lo que ve un celular) === */
 html,
 body {
   height: 100%;
 }
 
 body {
-  font-family: var(--fuente-base);
-  color: var(--color-texto);
-  background-color: var(--color-fondo);
+  position: relative;
+  isolation: isolate; /* crea contexto de apilamiento propio para los overlays ambientales */
+  font-family: var(--fuente-cuerpo);
+  color: var(--color-text);
+  background-color: var(--color-bg);
   line-height: 1.5;
-  padding: 1.5rem;
-  max-width: 700px;
+  padding: 1.25rem 1rem 3rem;
+  max-width: 880px;
   margin-inline: auto;
 }
 
-/* === Header / Título principal === */
-header {
-  margin-bottom: 1.5rem;
+/* Vignette + resplandor ambiental fijo al viewport, detrás de todo el contenido */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(
+      ellipse 900px 500px at 12% -5%,
+      rgba(var(--accent-rgb), 0.1),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 700px 500px at 100% 10%,
+      rgba(var(--accent-2-rgb), 0.07),
+      transparent 55%
+    ),
+    var(--color-bg);
 }
 
-h1 {
-  font-size: 1.75rem;
+/* Líneas de escaneo tipo pantalla LCD, muy sutiles */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    opacity: 0.25;
+  }
+}
+
+/* === Masthead + ecualizador === */
+.masthead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  margin-bottom: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 60%),
+    var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-bottom: 2px solid rgba(var(--accent-rgb), 0.35);
+  border-radius: var(--radio);
+  box-shadow:
+    0 12px 30px -18px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.masthead h1 {
+  position: relative;
+  font-family: var(--fuente-display);
   font-weight: 700;
-  margin: 0;
+  font-size: clamp(1.6rem, 5vw, 2.25rem);
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+  padding-right: 0.9rem;
+}
+
+/* Piloto "on air": un LED que respira junto al logo, como el testigo de encendido de una consola */
+.masthead h1::after {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  right: -0.15rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 6px 1px rgba(var(--accent-rgb), 0.8);
+  animation: respirar 2.4s ease-in-out infinite;
+}
+
+@keyframes respirar {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.eq-masthead {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+}
+
+.eq-barra {
+  width: 5px;
+  height: 30%;
+  background-color: var(--color-accent);
+  border-radius: 1px;
+  box-shadow: 0 0 4px rgba(var(--accent-rgb), 0.6);
+  transition:
+    background-color var(--transicion),
+    opacity var(--transicion);
+  opacity: 0.35;
+}
+
+.eq-masthead.eq-activo .eq-barra {
+  opacity: 1;
+  animation: rebotar 0.9s ease-in-out infinite;
+}
+
+.eq-masthead.eq-activo .eq-barra:nth-child(1) {
+  animation-delay: 0s;
+}
+.eq-masthead.eq-activo .eq-barra:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.eq-masthead.eq-activo .eq-barra:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.eq-masthead.eq-activo .eq-barra:nth-child(4) {
+  animation-delay: 0.1s;
+}
+
+@keyframes rebotar {
+  0%,
+  100% {
+    height: 20%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq-masthead.eq-activo .eq-barra {
+    animation: none;
+    height: 60%;
+  }
+  .masthead h1::after {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 h2 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
 }
 
-/* === Sección de búsqueda === */
-#seccion-busqueda {
-  margin-bottom: 2rem;
-}
-
-#form-busqueda {
+/* === Pestañas: selector de canal de consola === */
+.tabs {
   display: flex;
   gap: 0.5rem;
+  padding: 0.35rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radio);
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.4rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  font-family: var(--fuente-display);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    color var(--transicion),
+    background-color var(--transicion),
+    border-color var(--transicion);
+}
+
+.tab-btn:hover {
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.tab-btn[aria-selected="true"] {
+  color: var(--color-bg);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 16px -2px rgba(var(--accent-rgb), 0.55);
+}
+
+.tab-btn:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-accent);
+}
+
+/* === Búsqueda: lector estilo LCD === */
+#form-busqueda {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   margin-bottom: 1rem;
 }
 
 #input-busqueda {
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-borde);
-  font-size: 1rem;
-  font-family: inherit;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--fuente-mono);
+  font-size: 0.95rem;
+  border-radius: var(--radio);
+  transition:
+    border-color var(--transicion),
+    box-shadow var(--transicion);
 }
 
-#input-busqueda:focus {
-  outline: 2px solid var(--color-primario);
-  outline-offset: 2px;
+#input-busqueda:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
+}
+
+#input-busqueda::placeholder {
+  color: var(--color-muted);
 }
 
 #btn-buscar {
-  padding: 0.5rem 1.25rem;
-  border: none;
-  border-radius: var(--radio-borde);
-  background-color: var(--color-primario);
-  color: #fff;
-  font-size: 1rem;
-  font-family: inherit;
+  width: 100%;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radio);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition:
+    transform var(--transicion),
+    box-shadow var(--transicion);
 }
 
 #btn-buscar:hover:not(:disabled) {
-  background-color: var(--color-primario-hover);
+  box-shadow: 0 0 18px -2px rgba(var(--accent-rgb), 0.6);
+  transform: translateY(-1px);
+}
+
+#btn-buscar:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 #btn-buscar:disabled {
-  background-color: var(--color-borde);
-  color: var(--color-texto-suave);
-  opacity: 0.7;
+  background-color: var(--color-surface);
+  border-color: var(--color-line);
+  color: var(--color-muted);
   cursor: not-allowed;
 }
 
 /* === Mensaje de estado de la búsqueda === */
 #mensaje-busqueda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  color: var(--color-muted);
   margin-bottom: 1rem;
-  font-size: 0.95rem;
-  color: var(--color-texto-suave);
+  min-height: 2.5rem;
+  text-align: center;
 }
 
-#mensaje-busqueda:has(+ #lista-resultados:empty) {
-  margin-bottom: 0;
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  border-top-color: var(--color-accent);
+  border-right-color: var(--color-accent-2);
+  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.35);
+  animation: girar 0.7s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
 }
 
-/* === Lista de resultados === */
-#lista-resultados {
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Listas (resultados y playlists): channel strips === */
+#lista-resultados,
+#lista-playlists {
   list-style: none;
-  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
-.resultado-item {
+.resultado-item,
+.playlist-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio-borde);
-  padding: 0.5rem;
-  background-color: #fff;
+  padding: 0.8rem 0.9rem 0.8rem 1.1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radio);
+  overflow: hidden;
+  transition:
+    transform var(--transicion),
+    border-color var(--transicion),
+    box-shadow var(--transicion);
+}
+
+/* Franja LED lateral, como el fader de un canal de mezcla */
+.resultado-item::before,
+.playlist-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    var(--color-accent),
+    var(--color-accent-2)
+  );
+  opacity: 0.7;
+  transition:
+    opacity var(--transicion),
+    width var(--transicion);
+}
+
+.resultado-item:hover,
+.playlist-item:hover {
+  border-color: rgba(var(--accent-rgb), 0.4);
+  box-shadow: 0 10px 24px -16px rgba(0, 0, 0, 0.9);
+  transform: translateY(-1px);
+}
+
+.resultado-item:hover::before,
+.playlist-item:hover::before {
+  width: 4px;
+  opacity: 1;
+}
+
+.eq-mini {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 20px;
+  width: 18px;
+  flex-shrink: 0;
+  padding: 2px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.eq-mini span {
+  width: 3px;
+  border-radius: 1px;
+  background-color: var(--color-accent-2);
+  box-shadow: 0 0 3px rgba(var(--accent-2-rgb), 0.7);
 }
 
 .resultado-item img {
-  width: 48px;
-  height: 48px;
-  border-radius: 4px;
+  width: 44px;
+  height: 44px;
   object-fit: cover;
+  border-radius: 4px;
   flex-shrink: 0;
+  border: 1px solid var(--color-line);
 }
 
-.resultado-item strong {
+.resultado-item strong,
+.playlist-item strong {
+  font-family: var(--fuente-cuerpo);
+  font-weight: 500;
   font-size: 0.95rem;
+  color: var(--color-text);
 }
 
-.resultado-item small {
-  color: var(--color-texto-suave);
+.resultado-item small,
+.playlist-item span {
+  font-family: var(--fuente-mono);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  display: block;
+  letter-spacing: 0.02em;
+}
+
+.playlists-vacio {
+  color: var(--color-muted);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-line);
+  border-radius: var(--radio);
+}
+
+.playlists-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+#btn-nueva-playlist {
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  font-family: var(--fuente-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition:
+    background-color var(--transicion),
+    color var(--transicion),
+    box-shadow var(--transicion);
+}
+
+#btn-nueva-playlist:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  box-shadow: 0 0 18px -2px rgba(var(--accent-rgb), 0.6);
+}
+
+/* === Modal: panel de rack, con marcas de esquina tipo flightcase === */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(5, 6, 10, 0.82);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.overlay.oculto {
+  display: none;
+}
+
+.modal {
+  position: relative;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 380px;
+  box-shadow:
+    0 24px 60px -20px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* Marcas de esquina, referencia visual a equipos de rack/flightcase */
+.modal::before,
+.modal::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(var(--accent-rgb), 0.6);
+  top: 8px;
+}
+
+.modal::before {
+  left: 8px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.modal::after {
+  right: 8px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.modal h3 {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+}
+
+.modal label {
+  display: block;
+  font-family: var(--fuente-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  margin-bottom: 0.4rem;
+}
+
+.modal input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: 4px;
+  font-family: var(--fuente-mono);
+  font-size: 1rem;
+  transition:
+    border-color var(--transicion),
+    box-shadow var(--transicion);
+}
+
+.modal input:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
+}
+
+#error-nueva-playlist {
+  font-family: var(--fuente-mono);
+  color: var(--color-accent-2);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  min-height: 1.1rem;
+}
+
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.modal-acciones button {
+  padding: 0.55rem 1.1rem;
+  border-radius: 4px;
+  font-family: var(--fuente-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition:
+    background-color var(--transicion),
+    color var(--transicion),
+    border-color var(--transicion);
+}
+
+#btn-cancelar-playlist {
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-muted);
+}
+
+#btn-cancelar-playlist:hover {
+  color: var(--color-text);
+  border-color: var(--color-muted);
+}
+
+#btn-crear-playlist {
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+#btn-crear-playlist:hover {
+  box-shadow: 0 0 16px -2px rgba(var(--accent-rgb), 0.6);
+}
+
+/* === Scrollbar (WebKit) a tono con la consola === */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-line);
+  border-radius: 5px;
+  border: 2px solid var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-muted);
+}
+
+/* === Pie de página === */
+.pie-pagina {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line);
+  text-align: center;
+}
+
+.pie-pagina p {
+  font-family: var(--fuente-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
 }
 
 /* === Utilidades === */
@@ -155,21 +692,30 @@ h2 {
   white-space: nowrap;
 }
 
-/* === Spinner de carga === */
-.spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--color-borde);
-  border-top-color: var(--color-primario);
-  border-radius: 50%;
-  vertical-align: middle;
-  margin-right: 0.35rem;
-  animation: girar 0.6s linear infinite;
-}
+/* ============================================================
+   Mobile First: a partir de acá, mejoras progresivas para
+   pantallas más grandes que un celular (>480px).
+   ============================================================ */
+@media (min-width: 481px) {
+  body {
+    padding: 2rem 1.5rem 4rem;
+  }
 
-@keyframes girar {
-  to {
-    transform: rotate(360deg);
+  .masthead {
+    gap: 1rem;
+    padding: 1rem 1.1rem 1.25rem;
+  }
+
+  #form-busqueda {
+    flex-direction: row;
+  }
+
+  #btn-buscar {
+    width: auto;
+  }
+
+  .tab-btn {
+    font-size: 0.85rem;
+    padding: 0.65rem 0.75rem;
   }
 }
