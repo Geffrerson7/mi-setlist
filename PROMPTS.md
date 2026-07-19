@@ -538,3 +538,41 @@ A: Solo un botón/link específico dentro de la card (ej. 'Ver')
 3. css/styles.css — botón "Ver", botón "Volver", título de detalle
 4. js/ui.js — referencias, formateo de fecha y render del detalle
 5. js/app.js — conectar
+
+## 19/07/2026 — Implementación HU5
+
+**Para qué:** Implementar la HU4.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-06: Persistir playlists y canciones al recargar
+**Sprint:** 1
+**Prioridad:** Alta
+Como usuario, quiero que mis playlists y canciones se mantengan guardadas al recargar la página, para no perder mi organización de música.
+**Criterios de aceptación:**
+- Al recargar la página, todas las playlists creadas siguen visibles.
+- Al recargar la página, las canciones agregadas a cada playlist se mantienen con su fecha de agregado.
+- Si cierro y vuelvo a abrir la aplicación más tarde, la información sigue disponible.
+MODO: Antes de escribir código, hazme 2 o 3 preguntas estratégicas
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato. No reescribas archivos que no
+te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Qué debe persistir en localStorage?
+A: Solo playlists y sus canciones
+
+Q: ¿Cuándo debe guardarse en localStorage?
+A: Automático en cada cambio de estado (cada vez que se crea/agrega/quita algo)
+
+Q: Si el guardado falla (localStorage lleno o deshabilitado por el navegador), ¿qué preferu00eds?
+A: Mostrar un toast avisando que no se pudo guardar
+```
+
+**Resultado:**
+1) js/storage.js (nuevo archivo)
+2) js/state.js — cargar desde storage al iniciar el estado
+3) js/app.js — guardar automáticamente en cada cambio (con guard)

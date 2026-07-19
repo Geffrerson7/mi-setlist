@@ -1,8 +1,9 @@
 import { Playlist } from "./models/Playlist.js";
+import { cargarPlaylists } from "./storage.js";
 
 let estado = {
   busqueda: { status: "idle", resultados: [], mensajeError: null },
-  playlists: [],
+  playlists: cargarPlaylists(),
   modal: { tipo: null, error: null },
   modalAgregar: { abierto: false, cancionId: null, filtro: "" },
   vistaActiva: "busqueda",
@@ -130,7 +131,9 @@ export function abrirModalNuevaPlaylistDesdeAgregar() {
 }
 
 export function agregarCancionAPlaylist(cancionId, playlistId) {
-  const cancion = estado.busqueda.resultados.find((c) => c.id === Number(cancionId));
+  const cancion = estado.busqueda.resultados.find(
+    (c) => c.id === Number(cancionId),
+  );
   const playlist = estado.playlists.find((p) => p.id === playlistId);
 
   if (!cancion || !playlist) return;

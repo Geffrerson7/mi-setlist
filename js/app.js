@@ -24,8 +24,10 @@ import {
   inicializarModalAgregar,
   inicializarVistaDetallePlaylist,
 } from "./ui.js";
+import { guardarPlaylists } from "./storage.js";
 
 let idBusquedaActual = 0;
+let ultimasPlaylistsGuardadas = null;
 
 async function manejarBusqueda(termino) {
   const idDeEstaBusqueda = ++idBusquedaActual;
@@ -58,8 +60,21 @@ async function manejarBusqueda(termino) {
   }
 }
 
+function persistirPlaylists(estadoActual) {
+  if (estadoActual.playlists === ultimasPlaylistsGuardadas) return;
+  ultimasPlaylistsGuardadas = estadoActual.playlists;
+
+  const exito = guardarPlaylists(estadoActual.playlists);
+  if (!exito) {
+    mostrarToast(
+      "⚠ No se pudo guardar tu playlist (almacenamiento lleno o deshabilitado)",
+    );
+  }
+}
+
 function iniciar() {
   suscribirse(render);
+  suscribirse(persistirPlaylists);
   inicializarInputBusqueda();
   inicializarFormularioBusqueda(manejarBusqueda);
   inicializarModalNuevaPlaylist({
