@@ -8,6 +8,7 @@ let estado = {
   vistaActiva: "busqueda",
   toast: { mensaje: null },
   cancionPendiente: null,
+  playlistSeleccionadaId: null,
 };
 
 const listeners = [];
@@ -129,7 +130,7 @@ export function abrirModalNuevaPlaylistDesdeAgregar() {
 }
 
 export function agregarCancionAPlaylist(cancionId, playlistId) {
-  const cancion = estado.busqueda.resultados.find((c) => c.id === cancionId);
+  const cancion = estado.busqueda.resultados.find((c) => c.id === Number(cancionId));
   const playlist = estado.playlists.find((p) => p.id === playlistId);
 
   if (!cancion || !playlist) return;
@@ -160,4 +161,12 @@ export function agregarCancionAPlaylist(cancionId, playlistId) {
     modalAgregar: { abierto: false, cancionId: null, filtro: "" },
   });
   mostrarToast(`✓ "${cancion.titulo}" agregada a ${playlist.nombre}`);
+}
+
+export function seleccionarPlaylist(playlistId) {
+  actualizarEstado({ playlistSeleccionadaId: playlistId });
+}
+
+export function volverAListaPlaylists() {
+  actualizarEstado({ playlistSeleccionadaId: null });
 }

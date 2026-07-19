@@ -22,12 +22,22 @@ const listaOpcionesPlaylist = document.getElementById(
 );
 const btnCerrarAgregar = document.getElementById("btn-cerrar-agregar");
 const inputFiltroPlaylist = document.getElementById("input-filtro-playlist");
+const vistaListaPlaylists = document.getElementById("vista-lista-playlists");
+const vistaDetallePlaylist = document.getElementById("vista-detalle-playlist");
+const btnVolverPlaylists = document.getElementById("btn-volver-playlists");
+const detallePlaylistNombre = document.getElementById(
+  "detalle-playlist-nombre",
+);
+const listaCancionesPlaylist = document.getElementById(
+  "lista-canciones-playlist",
+);
 
 export function render(estado) {
   renderBotonBuscar();
   renderMensajeBusqueda(estado.busqueda);
   renderResultados(estado.busqueda.resultados);
   renderPlaylists(estado.playlists);
+  renderVistaPlaylists(estado.playlists, estado.playlistSeleccionadaId); // ← nueva línea
   renderModal(estado.modal);
   renderModalAgregar(
     estado.modalAgregar,
@@ -119,8 +129,11 @@ function renderPlaylists(playlists) {
     .map(
       (playlist) => `
       <li class="playlist-item" data-id="${playlist.id}">
-        <strong>${playlist.nombre}</strong>
-        <span> — ${playlist.canciones.length} canciones</span>
+        <div>
+          <strong>${playlist.nombre}</strong>
+          <span> — ${playlist.canciones.length} canciones</span>
+        </div>
+        <button type="button" class="btn-ver-playlist" data-playlist-id="${playlist.id}">Ver</button>
       </li>
     `,
     )
@@ -280,4 +293,55 @@ function cerrarAlClickAfuera(overlay, onCerrar) {
       onCerrar();
     }
   });
+}
+
+function formatearFecha(fecha) {
+  const d = new Date(fecha);
+  const dia = String(d.getDate()).padStart(2, "0");
+  const mes = String(d.getMonth() + 1).padStart(2, "0");
+  const anio = d.getFullYear();
+  return `${dia}/${mes}/${anio}`;
+}
+
+function renderVistaPlaylists(playlists, playlistSeleccionadaId) {
+  const playlistSeleccionada = playlists.find(
+    (p) => p.id === playlistSeleccionadaId,
+  );
+
+  vistaListaPlaylists.hidden = Boolean(playlistSeleccionada);
+  vistaDetallePlaylist.hidden = !playlistSeleccionada;
+
+  if (!playlistSeleccionada) return;
+
+  detallePlaylistNombre.textContent = playlistSeleccionada.nombre;
+
+  if (playlistSeleccionada.canciones.length === 0) {
+    listaCancionesPlaylist.innerHTML =
+      '<li class="playlists-vacio">Esta playlist todavía no tiene canciones 🎧</li>';
+    return;
+  }
+
+  listaCancionesPlaylist.innerHTML = playlistSeleccionada.canciones
+    .map(
+      ({ cancion, fechaAgregado }) => `
+      <li class="resultado-item">
+        <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" />
+        <div>
+          <strong>${cancion.titulo}</strong> — ${cancion.duracionFormateada}
+          <br />
+          <small>${cancion.artista} · Agregada el ${formatearFecha(fechaAgregado)}</small>
+        </div>
+      </li>
+    `,
+    )
+    .join("");
+}
+
+export function inicializarVistaDetallePlaylist({ onSeleccionar, onVolver }) {
+  listaPlaylists.addEventListener("click", (evento) => {
+    const btn = evento.target.closest(".btn-ver-playlist");
+    if (btn) onSeleccionar(btn.dataset.playlistId);
+  });
+
+  btnVolverPlaylists.addEventListener("click", onVolver);
 }

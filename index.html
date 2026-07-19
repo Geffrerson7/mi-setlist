@@ -74,11 +74,26 @@
       role="tabpanel"
       hidden
     >
-      <div class="playlists-header">
-        <h2 class="sr-only">Mis playlists</h2>
-        <button type="button" id="btn-nueva-playlist">+ Nueva playlist</button>
+      <div id="vista-lista-playlists">
+        <div class="playlists-header">
+          <h2 class="sr-only">Mis playlists</h2>
+          <button type="button" id="btn-nueva-playlist">
+            + Nueva playlist
+          </button>
+        </div>
+        <ul id="lista-playlists" aria-label="Lista de playlists"></ul>
       </div>
-      <ul id="lista-playlists" aria-label="Lista de playlists"></ul>
+
+      <div id="vista-detalle-playlist" hidden>
+        <button type="button" id="btn-volver-playlists" class="btn-volver">
+          ← Volver a mis playlists
+        </button>
+        <h2 id="detalle-playlist-nombre" class="detalle-titulo"></h2>
+        <ul
+          id="lista-canciones-playlist"
+          aria-label="Canciones de la playlist"
+        ></ul>
+      </div>
     </section>
 
     <footer class="pie-pagina">

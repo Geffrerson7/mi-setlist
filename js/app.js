@@ -12,6 +12,8 @@ import {
   agregarCancionAPlaylist,
   abrirModalNuevaPlaylistDesdeAgregar,
   filtrarPlaylistsEnModal,
+  seleccionarPlaylist,
+  volverAListaPlaylists,
 } from "./state.js";
 import {
   render,
@@ -20,6 +22,7 @@ import {
   inicializarModalNuevaPlaylist,
   inicializarTabs,
   inicializarModalAgregar,
+  inicializarVistaDetallePlaylist,
 } from "./ui.js";
 
 let idBusquedaActual = 0;
@@ -76,6 +79,10 @@ function iniciar() {
     onFiltrar: filtrarPlaylistsEnModal,
   });
   render(getEstado());
+  inicializarVistaDetallePlaylist({
+    onSeleccionar: seleccionarPlaylist,
+    onVolver: volverAListaPlaylists,
+  });
 }
 
 iniciar();
