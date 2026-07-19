@@ -496,7 +496,7 @@ A: Arriba de todas (la más nueva primero)
 
 ## 19/07/2026 — Implementación HU5
 
-**Para qué:** Implementar la HU4.
+**Para qué:** Implementar la HU5.
 **Prompt:**
 
 ```
@@ -539,9 +539,9 @@ A: Solo un botón/link específico dentro de la card (ej. 'Ver')
 4. js/ui.js — referencias, formateo de fecha y render del detalle
 5. js/app.js — conectar
 
-## 19/07/2026 — Implementación HU5
+## 19/07/2026 — Implementación HU6
 
-**Para qué:** Implementar la HU4.
+**Para qué:** Implementar la HU6.
 **Prompt:**
 
 ```
@@ -576,3 +576,86 @@ A: Mostrar un toast avisando que no se pudo guardar
 1) js/storage.js (nuevo archivo)
 2) js/state.js — cargar desde storage al iniciar el estado
 3) js/app.js — guardar automáticamente en cada cambio (con guard)
+
+## 19/07/2026 — Actualización del README.md
+
+**Para qué:** Documentar todo los avances que se han hecho hasta el momento.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS la información que hay que actualizar en el README.md
+# MI-SETLIST
+Aplicación web para buscar canciones en el catálogo de iTunes y organizarlas en playlists personales que se guardan en tu navegador, sin necesidad de cuenta ni backend.
+## Stack tecnológico
+- **HTML** semántico
+- **CSS**
+- **Tailwind CSS**
+- **JavaScript vanilla** con módulos ESM (import/export, <script type="module">)
+- **iTunes Search API** (solo lectura, sin key) para la búsqueda de canciones
+- **LocalStorage** para la persistencia de playlists y canciones
+- **GitHub Pages** para el deploy
+## Historias de usuario
+### Sprint 1
+- **HU-01** — Buscar canciones en el catálogo
+- **HU-02** — Comunicar el estado de la búsqueda (carga / error / sin resultados)
+- **HU-03** — Crear una playlist nueva
+- **HU-04** — Agregar una canción a una playlist
+- **HU-05** — Ver el contenido de una playlist
+- **HU-06** — Persistir playlists y canciones al recargar
+### Sprint 2
+- **HU-07** — Quitar canciones y eliminar playlists con confirmación
+- **HU-08** — Ver duración total de la playlist
+- **HU-09** — Ver estadísticas de la playlist (género y artista más frecuentes)
+- **HU-10** — Ordenar canciones dentro de una playlist
+- **HU-11** — Recuperación ante datos corruptos
+## Cómo ejecutar el proyecto localmente
+Este proyecto usa módulos ESM, por lo que **no funciona abriendo index.html directamente con file://**. Es necesario servirlo con un servidor local, por ejemplo con la extensión **Live Server** de VS Code:
+1. Clonar el repositorio:
+   bash
+   git clone https://github.com/tu-usuario/mi-setlist.git
+   cd mi-setlist
+   
+2. Abir la carpeta del proyecto en VS Code.
+3. Instalar la extensión **Live Server** (si no la tenés).
+4. Hacer clic derecho sobre index.html y seleccioná **"Open with Live Server"**.
+5. El proyecto se abrirá en tu navegador en una URL local (por ejemplo http://127.0.0.1:5500).
+Alternativamente, podés usar cualquier otro servidor estático local, por ejemplo:
+bash
+npx serve .
+
+## Estructura de archivos
+
+mi-setlist/
+├── index.html
+├── css/styles.css
+├── js/
+│   ├── app.js             # Punto de entrada, inicialización
+│   ├── models/Cancion.js  # Clase que modela una canción
+│   ├── state.js           # Estado central (playlists)
+│   ├── storage.js         # localStorage (guardar/cargar/limpiar)
+│   ├── api.js              # fetch a la API de iTunes
+│   └── ui.js              # render + eventos del DOM
+├── PROMPTS.md             # Registro de trabajo con la IA
+├── README.md              # Documentación del proyecto
+└── .gitignore
+
+MODO: Antes de escribir código, hazme 2 o 3 preguntas estratégicas
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato. No reescribas archivos que no
+te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: Pusiste 'Tailwind CSS' en el stack, pero hasta ahora todo el CSS que armamos es propio (variables, sin Tailwind). ¿Lo saco del README o realmente lo vas a incorporar?
+A: No, sacar Tailwind (nunca lo usamos, es CSS propio con variables)
+
+Q: ¿Querés que el README refleje el progreso actual (Sprint 1 completo, Sprint 2 pendiente)?
+A: No, dejar la lista de HUs sin indicar estado
+
+Q: En la estructura de archivos falta 'js/models/Playlist.js' (ya lo creamos en HU-03) y hay un pequeño desalineado en el coment  ario de api.js. ¿Lo corrijo?
+A: Sí, agregar Playlist.js y corregir el desalineado de api.js
+```
+
+**Resultado:**
+1) Nuevo README.md con informacion de actualizada del SPRINT 1
