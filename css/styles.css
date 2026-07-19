@@ -367,9 +367,10 @@ input:focus-visible {
   }
 }
 
-/* === Listas (resultados y playlists): channel strips === */
+/* === Listas (resultados, playlists y canciones de playlists): channel strips === */
 #lista-resultados,
-#lista-playlists {
+#lista-playlists,
+#lista-canciones-playlist {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -430,8 +431,8 @@ input:focus-visible {
   display: flex;
   align-items: flex-end;
   gap: 2px;
+  width: 22px;
   height: 20px;
-  width: 18px;
   flex-shrink: 0;
   padding: 2px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -443,11 +444,6 @@ input:focus-visible {
   border-radius: 1px;
   background-color: var(--color-accent-2);
   box-shadow: 0 0 3px rgba(var(--accent-2-rgb), 0.7);
-}
-
-.resultado-item > div {
-  flex: 1;
-  min-width: 0;
 }
 
 .resultado-item img {
@@ -513,6 +509,56 @@ input:focus-visible {
   background-color: var(--color-accent);
   color: var(--color-bg);
   box-shadow: 0 0 18px -2px rgba(var(--accent-rgb), 0.6);
+}
+
+/* === Card de playlist con botón "Ver" === */
+.playlist-item {
+  justify-content: space-between;
+}
+
+.btn-ver-playlist {
+  flex-shrink: 0;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  font-family: var(--fuente-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+
+.btn-ver-playlist:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* === Detalle de playlist === */
+.btn-volver {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  color: var(--color-accent);
+}
+
+.detalle-titulo {
+  font-family: var(--fuente-display);
+  font-size: 1.3rem;
+  color: var(--color-text);
+  text-transform: none;
+  letter-spacing: normal;
+  margin-bottom: 1rem;
 }
 
 /* === Modal: panel de rack, con marcas de esquina tipo flightcase === */

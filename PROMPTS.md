@@ -445,3 +445,96 @@ A: Arriba de todas (la más nueva primero)
 3. css/styles.css — estilos de playlists y modal
 4. js/ui.js — render de playlists + render/eventos del modal
 5. js/app.js — conectar el modal
+
+## 17/07/2026 — Implementación HU4
+
+**Para qué:** Implementar la HU4.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-04: Agregar una canción a una playlist
+**Sprint:** 1
+**Prioridad:** Alta
+
+Como usuario, quiero agregar canciones desde los resultados de búsqueda a una playlist, para ir construyendo mi selección de música.
+
+**Criterios de aceptación:**
+- Desde cada resultado de búsqueda puedo elegir a qué playlist agregar la canción.
+- Si no tengo playlists creadas, se me informa y se me ofrece crear una.
+- Al agregar una canción, recibo una confirmación visual de que fue añadida.
+- Puedo agregar la misma canción a más de una playlist.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Cómo preferís el formulario para crear playlist?
+A: Modal (como el de confirmación de eliminar)
+
+Q: ¿Se permiten dos playlists con el mismo nombre (ej. dos 'Favoritos')?
+A: No, bloquear si ya existe una playlist con ese nombre
+
+Q: ¿Dónde debería aparecer la playlist recién creada en la lista 'Mis playlists'?
+A: Arriba de todas (la más nueva primero)
+```
+
+**Resultado:**
+
+1. js/state.js — agregar 4 campos al estado inicial
+2. js/state.js — modificar abrirModalNuevaPlaylist y cerrarModa
+3. js/state.js — modificar crearPlaylist
+4. js/state.js — 5 funciones nuevas, agregalas al final del archivo
+5. index.html — agregar el contenedor del toast
+6. css/styles.css — estilos del dropdown "Agregar a" y del toast
+7. js/ui.js — dropdown por resultado + toast + eventos
+8. js/app.js
+
+## 19/07/2026 — Implementación HU5
+
+**Para qué:** Implementar la HU4.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-05: Ver el contenido de una playlist
+**Sprint:** 1
+**Prioridad:** Alta
+Como usuario, quiero ver el listado completo de canciones de una playlist, para revisar qué música ya agregué.
+**Criterios de aceptación:**
+- Al seleccionar una playlist, se muestra la lista de canciones que contiene con carátula, nombre, artista y duración.
+- Cada canción muestra la fecha en que fue agregada a la playlist.
+- Si la playlist no tiene canciones, se muestra un mensaje amigable indicando que está vacía.
+- Puedo volver a la lista general de playlists desde esta vista.
+
+
+MODO: Antes de escribir código, hazme 2 o 3 preguntas estratégicas
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato. No reescribas archivos que no
+te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Cómo preferís mostrar el detalle de una playlist al seleccionarla?
+A: Vista de detalle dentro de la misma pestaña 'Mis playlists' (reemplaza la lista)
+
+Q: ¿En qué formato querés mostrar la fecha en que se agregó cada canción?
+A: Fecha absoluta (ej. 14/07/2026)
+
+Q: ¿Cómo se selecciona una playlist para ver su detalle?
+A: Solo un botón/link específico dentro de la card (ej. 'Ver')
+```
+
+**Resultado:**
+
+1. js/state.js — agregar playlistSeleccionadaId + 2 funciones
+2. index.html — envolver la lista existente + agregar la vista de detalle
+3. css/styles.css — botón "Ver", botón "Volver", título de detalle
+4. js/ui.js — referencias, formateo de fecha y render del detalle
+5. js/app.js — conectar
