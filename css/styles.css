@@ -16,7 +16,6 @@
   --color-muted: #5b6270;
   --color-line: #232a37;
 
-  /* mismos colores en formato r,g,b para usarlos en rgba() (glows, overlays) */
   --accent-rgb: 0, 224, 168;
   --accent-2-rgb: 255, 61, 110;
 
@@ -36,7 +35,7 @@ body {
 
 body {
   position: relative;
-  isolation: isolate; /* crea contexto de apilamiento propio para los overlays ambientales */
+  isolation: isolate;
   font-family: var(--fuente-cuerpo);
   color: var(--color-text);
   background-color: var(--color-bg);
