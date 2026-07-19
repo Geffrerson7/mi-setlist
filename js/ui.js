@@ -14,6 +14,14 @@ const tabPlaylists = document.getElementById("tab-playlists");
 const seccionBusqueda = document.getElementById("seccion-busqueda");
 const seccionPlaylists = document.getElementById("seccion-playlists");
 const eqMasthead = document.getElementById("eq-masthead");
+const toast = document.getElementById("toast");
+const overlayAgregar = document.getElementById("overlay-agregar");
+const agregarSubtitulo = document.getElementById("agregar-subtitulo");
+const listaOpcionesPlaylist = document.getElementById(
+  "lista-opciones-playlist",
+);
+const btnCerrarAgregar = document.getElementById("btn-cerrar-agregar");
+const inputFiltroPlaylist = document.getElementById("input-filtro-playlist");
 
 export function render(estado) {
   renderBotonBuscar();
@@ -21,8 +29,14 @@ export function render(estado) {
   renderResultados(estado.busqueda.resultados);
   renderPlaylists(estado.playlists);
   renderModal(estado.modal);
+  renderModalAgregar(
+    estado.modalAgregar,
+    estado.busqueda.resultados,
+    estado.playlists,
+  );
   renderTabs(estado.vistaActiva);
   renderEqMasthead(estado.busqueda.status);
+  renderToast(estado.toast);
 }
 
 function renderBotonBuscar() {
@@ -63,10 +77,18 @@ function renderResultados(resultados) {
           <br />
           <small>${cancion.artista}</small>
         </div>
+        <button type="button" class="btn-agregar" data-cancion-id="${cancion.id}">
+          + Agregar a
+        </button>
       </li>
     `,
     )
     .join("");
+}
+
+function renderToast({ mensaje }) {
+  toast.textContent = mensaje ?? "";
+  toast.classList.toggle("oculto", !mensaje);
 }
 
 // Habilita/deshabilita el botón mientras el usuario escribe.
@@ -126,6 +148,7 @@ export function inicializarModalNuevaPlaylist({
   });
 
   btnCancelarPlaylist.addEventListener("click", onCancelar);
+  cerrarAlClickAfuera(overlayModal, onCancelar);
 
   formNuevaPlaylist.addEventListener("submit", (evento) => {
     evento.preventDefault();
@@ -170,4 +193,91 @@ function renderEqMini(id) {
 
 function renderEqMasthead(status) {
   eqMasthead.classList.toggle("eq-activo", status === "loading");
+}
+
+function renderModalAgregar(
+  { abierto, cancionId, filtro },
+  resultados,
+  playlists,
+) {
+  overlayAgregar.classList.toggle("oculto", !abierto);
+  if (!abierto) return;
+
+  const cancion = resultados.find((c) => c.id === cancionId);
+  agregarSubtitulo.textContent = cancion
+    ? `"${cancion.titulo}" — ${cancion.artista}`
+    : "";
+
+  if (playlists.length === 0) {
+    inputFiltroPlaylist.hidden = true;
+    listaOpcionesPlaylist.innerHTML = `
+      <p class="agregar-vacio">Todavía no tenés playlists.</p>
+      <button type="button" class="btn-crear-desde-agregar">+ Crear una</button>
+    `;
+    return;
+  }
+
+  inputFiltroPlaylist.hidden = false;
+  if (inputFiltroPlaylist.value !== filtro) {
+    inputFiltroPlaylist.value = filtro;
+  }
+
+  const playlistsFiltradas = playlists
+    .filter((p) => p.nombre.toLowerCase().includes(filtro.trim().toLowerCase()))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+  if (playlistsFiltradas.length === 0) {
+    listaOpcionesPlaylist.innerHTML =
+      '<p class="opciones-vacio">No encontramos playlists con ese nombre.</p>';
+    return;
+  }
+
+  listaOpcionesPlaylist.innerHTML = playlistsFiltradas
+    .map(
+      (playlist) => `
+      <button type="button" class="opcion-playlist" data-playlist-id="${playlist.id}">
+        ${playlist.nombre} <span>— ${playlist.canciones.length} canciones</span>
+      </button>
+    `,
+    )
+    .join("");
+}
+
+export function inicializarModalAgregar({
+  onAbrir,
+  onCerrar,
+  onAgregarCancion,
+  onCrearDesdeAgregar,
+  onFiltrar,
+}) {
+  listaResultados.addEventListener("click", (evento) => {
+    const btn = evento.target.closest(".btn-agregar");
+    if (btn) onAbrir(btn.dataset.cancionId);
+  });
+
+  btnCerrarAgregar.addEventListener("click", onCerrar);
+  cerrarAlClickAfuera(overlayAgregar, onCerrar);
+
+  inputFiltroPlaylist.addEventListener("input", () => {
+    onFiltrar(inputFiltroPlaylist.value);
+  });
+
+  listaOpcionesPlaylist.addEventListener("click", (evento) => {
+    const btnCrear = evento.target.closest(".btn-crear-desde-agregar");
+    if (btnCrear) {
+      onCrearDesdeAgregar();
+      return;
+    }
+
+    const btnOpcion = evento.target.closest(".opcion-playlist");
+    if (btnOpcion) onAgregarCancion(btnOpcion.dataset.playlistId);
+  });
+}
+
+function cerrarAlClickAfuera(overlay, onCerrar) {
+  overlay.addEventListener("click", (evento) => {
+    if (evento.target === overlay) {
+      onCerrar();
+    }
+  });
 }

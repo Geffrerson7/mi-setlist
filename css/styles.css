@@ -445,6 +445,11 @@ input:focus-visible {
   box-shadow: 0 0 3px rgba(var(--accent-2-rgb), 0.7);
 }
 
+.resultado-item > div {
+  flex: 1;
+  min-width: 0;
+}
+
 .resultado-item img {
   width: 44px;
   height: 44px;
@@ -690,6 +695,158 @@ input:focus-visible {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* === Botón "Agregar a" en cada resultado === */
+.btn-agregar {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--color-line);
+  background-color: transparent;
+  color: var(--color-text);
+  font-family: var(--fuente-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--radio);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-agregar:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* === Modal "Agregar a una playlist" === */
+.modal-subtitulo {
+  font-family: var(--fuente-mono);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+#titulo-modal-agregar {
+  margin-bottom: 0.35rem;
+}
+
+.lista-opciones-playlist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.opcion-playlist {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radio);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--transicion),
+    color var(--transicion);
+}
+
+.opcion-playlist:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.opcion-playlist span {
+  font-family: var(--fuente-mono);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.agregar-vacio {
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.btn-crear-desde-agregar {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px dashed var(--color-accent);
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--color-accent);
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.btn-crear-desde-agregar:hover {
+  background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+#btn-cerrar-agregar {
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-muted);
+}
+
+#btn-cerrar-agregar:hover {
+  color: var(--color-text);
+  border-color: var(--color-muted);
+}
+
+.input-filtro-playlist {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radio);
+  font-family: var(--fuente-mono);
+  font-size: 0.85rem;
+}
+
+.input-filtro-playlist:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
+}
+
+.opciones-vacio {
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  padding: 0.5rem 0;
+}
+
+/* === Toast === */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-accent);
+  color: var(--color-text);
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radio);
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  box-shadow: 0 12px 30px -14px rgba(0, 0, 0, 0.9);
+  z-index: 20;
+}
+
+.toast.oculto {
+  display: none;
 }
 
 /* ============================================================

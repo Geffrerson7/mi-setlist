@@ -7,6 +7,11 @@ import {
   cerrarModal,
   crearPlaylist,
   cambiarVista,
+  abrirModalAgregar,
+  cerrarModalAgregar,
+  agregarCancionAPlaylist,
+  abrirModalNuevaPlaylistDesdeAgregar,
+  filtrarPlaylistsEnModal,
 } from "./state.js";
 import {
   render,
@@ -14,6 +19,7 @@ import {
   inicializarFormularioBusqueda,
   inicializarModalNuevaPlaylist,
   inicializarTabs,
+  inicializarModalAgregar,
 } from "./ui.js";
 
 let idBusquedaActual = 0;
@@ -59,6 +65,16 @@ function iniciar() {
     onCrear: crearPlaylist,
   });
   inicializarTabs(cambiarVista);
+  inicializarModalAgregar({
+    onAbrir: abrirModalAgregar,
+    onCerrar: cerrarModalAgregar,
+    onAgregarCancion: (playlistId) => {
+      const { cancionId } = getEstado().modalAgregar;
+      agregarCancionAPlaylist(cancionId, playlistId);
+    },
+    onCrearDesdeAgregar: abrirModalNuevaPlaylistDesdeAgregar,
+    onFiltrar: filtrarPlaylistsEnModal,
+  });
   render(getEstado());
 }
 
