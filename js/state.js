@@ -139,7 +139,7 @@ export function agregarCancionAPlaylist(cancionId, playlistId) {
   if (!cancion || !playlist) return;
 
   const yaEstaEnPlaylist = playlist.canciones.some(
-    (entrada) => entrada.cancion.id === cancionId,
+    (entrada) => entrada.cancion.id === Number(cancionId),
   );
   if (yaEstaEnPlaylist) {
     actualizarEstado({
