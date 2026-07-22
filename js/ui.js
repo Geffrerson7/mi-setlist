@@ -216,7 +216,7 @@ function renderModalAgregar(
   overlayAgregar.classList.toggle("oculto", !abierto);
   if (!abierto) return;
 
-  const cancion = resultados.find((c) => c.id === cancionId);
+  const cancion = resultados.find((c) => c.id === Number(cancionId));
   agregarSubtitulo.textContent = cancion
     ? `"${cancion.titulo}" — ${cancion.artista}`
     : "";
