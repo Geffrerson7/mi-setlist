@@ -34,6 +34,7 @@ function rehidratarPlaylist(datos) {
     nombre: datos.nombre,
     fechaCreacion: new Date(datos.fechaCreacion),
     fechaEdicion: datos.fechaEdicion ? new Date(datos.fechaEdicion) : null,
+    ordenCriterio: datos.ordenCriterio ?? "recientes",
     canciones: (datos.canciones ?? []).map((entrada) => ({
       cancion: new Cancion({ ...entrada.cancion }),
       fechaAgregado: new Date(entrada.fechaAgregado),

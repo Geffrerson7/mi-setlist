@@ -29,12 +29,14 @@ export class Playlist {
     canciones = [],
     fechaCreacion,
     fechaEdicion = null,
+    ordenCriterio = "recientes",
   }) {
     this.id = id ?? crypto.randomUUID();
     this.nombre = nombre;
     this.canciones = canciones;
     this.fechaCreacion = fechaCreacion ?? new Date();
     this.fechaEdicion = fechaEdicion;
+    this.ordenCriterio = ordenCriterio;
   }
 
   get duracionTotalMs() {
@@ -70,5 +72,29 @@ export class Playlist {
       ({ cancion }) => cancion.artista?.trim() || "Desconocido",
     );
     return calcularMasFrecuente(artistas);
+  }
+
+  get cancionesOrdenadas() {
+    const copia = [...this.canciones];
+
+    switch (this.ordenCriterio) {
+      case "antiguas":
+        return copia.sort(
+          (a, b) => new Date(a.fechaAgregado) - new Date(b.fechaAgregado),
+        );
+      case "alfabetico-az":
+        return copia.sort((a, b) =>
+          a.cancion.titulo.localeCompare(b.cancion.titulo),
+        );
+      case "alfabetico-za":
+        return copia.sort((a, b) =>
+          b.cancion.titulo.localeCompare(a.cancion.titulo),
+        );
+      case "recientes":
+      default:
+        return copia.sort(
+          (a, b) => new Date(b.fechaAgregado) - new Date(a.fechaAgregado),
+        );
+    }
   }
 }

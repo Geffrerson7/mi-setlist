@@ -45,7 +45,6 @@ const btnCancelarQuitarCancion = document.getElementById(
 const btnConfirmarQuitarCancion = document.getElementById(
   "btn-confirmar-quitar-cancion",
 );
-
 const overlayConfirmarEliminarPlaylist = document.getElementById(
   "overlay-confirmar-eliminar-playlist",
 );
@@ -67,6 +66,7 @@ const detallePlaylistEstadisticas = document.getElementById(
 const estadisticaCantidad = document.getElementById("estadistica-cantidad");
 const estadisticaGenero = document.getElementById("estadistica-genero");
 const estadisticaArtista = document.getElementById("estadistica-artista");
+const selectOrdenCanciones = document.getElementById("select-orden-canciones");
 
 export function render(estado) {
   renderBotonBuscar();
@@ -399,6 +399,10 @@ function renderVistaPlaylists(playlists, playlistSeleccionadaId) {
   ${playlistSeleccionada.duracionTotalFormateada}
 `;
 
+  if (selectOrdenCanciones.value !== playlistSeleccionada.ordenCriterio) {
+    selectOrdenCanciones.value = playlistSeleccionada.ordenCriterio;
+  }
+
   const tieneCanciones = playlistSeleccionada.canciones.length > 0;
   detallePlaylistEstadisticas.hidden = !tieneCanciones;
 
@@ -414,7 +418,7 @@ function renderVistaPlaylists(playlists, playlistSeleccionadaId) {
     return;
   }
 
-  listaCancionesPlaylist.innerHTML = playlistSeleccionada.canciones
+  listaCancionesPlaylist.innerHTML = playlistSeleccionada.cancionesOrdenadas
     .map(
       ({ cancion, fechaAgregado }) => `
     <li class="resultado-item">
@@ -443,6 +447,7 @@ export function inicializarVistaDetallePlaylist({
   onVolver,
   onAbrirQuitarCancion,
   onAbrirEliminarPlaylist,
+  onCambiarOrden,
 }) {
   listaPlaylists.addEventListener("click", (evento) => {
     const btn = evento.target.closest(".btn-ver-playlist");
@@ -457,4 +462,8 @@ export function inicializarVistaDetallePlaylist({
   });
 
   btnEliminarPlaylist.addEventListener("click", onAbrirEliminarPlaylist);
+
+  selectOrdenCanciones.addEventListener("change", () => {
+    onCambiarOrden(selectOrdenCanciones.value);
+  });
 }
