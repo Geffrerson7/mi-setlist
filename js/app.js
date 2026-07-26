@@ -14,6 +14,12 @@ import {
   filtrarPlaylistsEnModal,
   seleccionarPlaylist,
   volverAListaPlaylists,
+  abrirModalQuitarCancion, // ← nueva
+  cerrarModalQuitarCancion, // ← nueva
+  confirmarQuitarCancion, // ← nueva
+  abrirModalEliminarPlaylist, // ← nueva
+  cerrarModalEliminarPlaylist, // ← nueva
+  confirmarEliminarPlaylist,
 } from "./state.js";
 import {
   render,
@@ -23,6 +29,7 @@ import {
   inicializarTabs,
   inicializarModalAgregar,
   inicializarVistaDetallePlaylist,
+  inicializarModalesConfirmacion,
 } from "./ui.js";
 import { guardarPlaylists } from "./storage.js";
 
@@ -97,6 +104,20 @@ function iniciar() {
   inicializarVistaDetallePlaylist({
     onSeleccionar: seleccionarPlaylist,
     onVolver: volverAListaPlaylists,
+    onAbrirQuitarCancion: (cancionId) => {
+      const { playlistSeleccionadaId } = getEstado();
+      abrirModalQuitarCancion(playlistSeleccionadaId, cancionId);
+    },
+    onAbrirEliminarPlaylist: () => {
+      const { playlistSeleccionadaId } = getEstado();
+      abrirModalEliminarPlaylist(playlistSeleccionadaId);
+    },
+  });
+  inicializarModalesConfirmacion({
+    onCancelarQuitarCancion: cerrarModalQuitarCancion,
+    onConfirmarQuitarCancion: confirmarQuitarCancion,
+    onCancelarEliminarPlaylist: cerrarModalEliminarPlaylist,
+    onConfirmarEliminarPlaylist: confirmarEliminarPlaylist,
   });
 }
 
