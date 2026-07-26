@@ -782,3 +782,44 @@ R: Si una canción no tiene una duración conocida (duracionMs: null), se muestr
 2. index.html — 1 elemento nuevo (#detalle-playlist-duracion)
 3. ui.js — 1 referencia DOM + 2 líneas en templates existentes
 4. styles.css — 1 bloque de estilos
+
+## 25/07/2026 — Implementación HU9
+
+**Para qué:** Implementar la HU9.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-09: Ver estadísticas de la playlist
+**Sprint:** 2
+**Prioridad:** Media
+Como usuario, quiero ver estadísticas de mi playlist, para conocer mejor las características de mi música.
+**Criterios de aceptación:**
+- Dentro de la vista de una playlist se muestra la cantidad total de canciones.
+- Se muestra el género musical más frecuente entre las canciones de la playlist.
+- Se muestra el artista más repetido dentro de la playlist.
+- Si hay un empate entre géneros o artistas, se muestra al menos uno de forma consistente.
+- Las estadísticas se actualizan automáticamente al modificar la playlist.
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: Si hay empate entre géneros (o artistas) con la misma cantidad de canciones, ¿qué criterio de desempate usamos para elegir cuál mostrar?
+R: Alfabético (el que empieza antes en el abecedario)
+
+Q: iTunes a veces no devuelve género (o viene vacío). ¿Cómo tratamos esas canciones al calcular el género más frecuente?
+R: Se agrupan como categoría "Desconocido" y pueden ganar si son mayoría
+
+Q: Si la playlist está vacía, ¿qué mostramos en género más frecuente / artista más repetido?
+R: No mostrar la sección de estadísticas en absoluto si está vacía
+```
+
+**Resultado:**
+
+1. **`Playlist.js`** — helper `calcularMasFrecuente` + getters `generoMasFrecuente`, `artistaMasFrecuente`
+2. **`index.html`** — bloque `<dl id="detalle-playlist-estadisticas">`
+3. **`ui.js`** — 4 referencias DOM + ampliar `renderVistaPlaylists`
+4. **`styles.css`** — `.detalle-estadisticas`, `.estadistica-item`, `.estadistica-item dt/dd`
