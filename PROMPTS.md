@@ -823,3 +823,43 @@ R: No mostrar la sección de estadísticas en absoluto si está vacía
 2. **`index.html`** — bloque `<dl id="detalle-playlist-estadisticas">`
 3. **`ui.js`** — 4 referencias DOM + ampliar `renderVistaPlaylists`
 4. **`styles.css`** — `.detalle-estadisticas`, `.estadistica-item`, `.estadistica-item dt/dd`
+
+## 26/07/2026 — Implementación HU10
+
+**Para qué:** Implementar la HU10.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-10: Ordenar canciones dentro de una playlist
+**Sprint:** 2
+**Prioridad:** Media
+Como usuario, quiero ordenar las canciones de una playlist, para encontrar más fácilmente lo que busco según mi criterio.
+**Criterios de aceptación:**
+- Puedo ordenar las canciones por fecha de agregado (más recientes primero o más antiguas primero).
+- Puedo ordenar las canciones alfabéticamente por nombre.
+- El orden elegido se refleja inmediatamente en la lista visible.
+- El criterio de orden puede cambiarse sin perder ninguna canción de la playlist.
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Qué tipo de control querés para elegir el orden en la vista de detalle?
+R: Un selector desplegable (dropdown) con las 4 opciones
+Q: ¿Cuál debería ser el orden por defecto al abrir una playlist?
+R: Más recientes primero (orden de agregado descendente)
+Q: Si elegís un orden, salís de la playlist y volvés a entrar (o recargás la página), ¿qué debería pasar con el criterio elegido?
+R: Se recuerda por playlist (persiste en localStorage junto con sus canciones)
+```
+
+**Resultado:**
+1. **Playlist.js** — campo `ordenCriterio` en el constructor + getter `cancionesOrdenadas`
+2. **storage.js** — leer `ordenCriterio` al rehidratar (con fallback a `"recientes"`)
+3. **state.js** — función `cambiarOrdenPlaylist`
+4. **index.html** — `<div class="detalle-orden">` con el `<select>`
+5. **ui.js** — referencia DOM, sincronizar `<select>`, usar `cancionesOrdenadas`, wiring del evento `change`
+6. **app.js** — import + handler `onCambiarOrden`
+7. **styles.css** — `.detalle-orden` y sus hijos

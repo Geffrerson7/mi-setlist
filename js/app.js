@@ -20,6 +20,7 @@ import {
   abrirModalEliminarPlaylist, // ← nueva
   cerrarModalEliminarPlaylist, // ← nueva
   confirmarEliminarPlaylist,
+  cambiarOrdenPlaylist,
 } from "./state.js";
 import {
   render,
@@ -111,6 +112,10 @@ function iniciar() {
     onAbrirEliminarPlaylist: () => {
       const { playlistSeleccionadaId } = getEstado();
       abrirModalEliminarPlaylist(playlistSeleccionadaId);
+    },
+    onCambiarOrden: (nuevoCriterio) => {
+      const { playlistSeleccionadaId } = getEstado();
+      cambiarOrdenPlaylist(playlistSeleccionadaId, nuevoCriterio);
     },
   });
   inicializarModalesConfirmacion({

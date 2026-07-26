@@ -279,3 +279,13 @@ export function confirmarEliminarPlaylist() {
   });
   mostrarToast(`✓ Playlist "${playlistNombre}" eliminada`);
 }
+
+export function cambiarOrdenPlaylist(playlistId, nuevoCriterio) {
+  const playlistsActualizadas = estado.playlists.map((p) =>
+    p.id === playlistId
+      ? new Playlist({ ...p, ordenCriterio: nuevoCriterio })
+      : p,
+  );
+
+  actualizarEstado({ playlists: playlistsActualizadas });
+}

@@ -578,6 +578,37 @@ input:focus-visible {
   overflow-wrap: break-word;
 }
 
+.detalle-orden {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.detalle-orden label {
+  font-family: var(--fuente-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.detalle-orden select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+
+.detalle-orden select:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
+}
+
 .btn-ver-playlist {
   flex-shrink: 0;
   padding: 0.45rem 0.9rem;
