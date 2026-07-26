@@ -546,6 +546,38 @@ input:focus-visible {
   flex-shrink: 0;
 }
 
+.detalle-estadisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.estadistica-item {
+  padding: 0.75rem 0.6rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radio);
+  text-align: center;
+}
+
+.estadistica-item dt {
+  font-family: var(--fuente-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  margin-bottom: 0.35rem;
+}
+
+.estadistica-item dd {
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
 .btn-ver-playlist {
   flex-shrink: 0;
   padding: 0.45rem 0.9rem;
@@ -1019,6 +1051,7 @@ input:focus-visible {
    Mobile First: a partir de acá, mejoras progresivas para
    pantallas más grandes que un celular (>480px).
    ============================================================ */
+
 @media (min-width: 481px) {
   body {
     padding: 2rem 1.5rem 4rem;
