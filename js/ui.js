@@ -58,6 +58,9 @@ const btnCancelarEliminarPlaylist = document.getElementById(
 const btnConfirmarEliminarPlaylist = document.getElementById(
   "btn-confirmar-eliminar-playlist",
 );
+const detallePlaylistDuracion = document.getElementById(
+  "detalle-playlist-duracion",
+);
 
 export function render(estado) {
   renderBotonBuscar();
@@ -157,14 +160,18 @@ function renderPlaylists(playlists) {
   listaPlaylists.innerHTML = playlists
     .map(
       (playlist) => `
-      <li class="playlist-item" data-id="${playlist.id}">
-        <div>
-          <strong>${playlist.nombre}</strong>
-          <span> — ${playlist.canciones.length} canciones</span>
-        </div>
-        <button type="button" class="btn-ver-playlist" data-playlist-id="${playlist.id}">Ver</button>
-      </li>
-    `,
+    <li class="playlist-item" data-id="${playlist.id}">
+      <div>
+        <strong>${playlist.nombre}</strong>
+        <span>
+          — ${playlist.canciones.length} canciones ·
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icono-duracion-mini"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0" /><path d="M14.5 10.5l-2.5 2.5" /><path d="M17 8l1 -1" /><path d="M14 3h-4" /></svg>
+          ${playlist.duracionTotalFormateada}
+        </span>
+      </div>
+      <button type="button" class="btn-ver-playlist" data-playlist-id="${playlist.id}">Ver</button>
+    </li>
+  `,
     )
     .join("");
 }
@@ -381,6 +388,10 @@ function renderVistaPlaylists(playlists, playlistSeleccionadaId) {
   if (!playlistSeleccionada) return;
 
   detallePlaylistNombre.textContent = playlistSeleccionada.nombre;
+  detallePlaylistDuracion.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-stopwatch"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0 -14 0" /><path d="M14.5 10.5l-2.5 2.5" /><path d="M17 8l1 -1" /><path d="M14 3h-4" /></svg>
+  ${playlistSeleccionada.duracionTotalFormateada}
+`;
 
   if (playlistSeleccionada.canciones.length === 0) {
     listaCancionesPlaylist.innerHTML =
