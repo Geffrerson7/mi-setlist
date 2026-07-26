@@ -706,7 +706,7 @@ Notas de verificación
 
 ## 22/07/2026 — Implementación HU7
 
-**Para qué:** Implementar la HU1..
+**Para qué:** Implementar la HU7.
 **Prompt:**
 
 ```
@@ -739,3 +739,46 @@ RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores.
 1. Dos modales de confirmación nuevos (uno para quitar canción, otro para eliminar playlist), cada uno con su propio overlay en el HTML.
 2. Botón "Quitar" por canción, dentro de la lista de la vista de detalle.
 3. Botón "Eliminar playlist" único, visible solo en la vista de detalle (por ejemplo debajo del nombre).
+
+## 25/07/2026 — Implementación HU8
+
+**Para qué:** Implementar la HU8.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+
+HU-08: Ver duración total de la playlist
+**Sprint:** 2
+**Prioridad:** Alta
+Como usuario, quiero ver la duración total de una playlist en formato legible, para saber cuánto dura mi selección de música.
+**Criterios de aceptación:**
+- Dentro de la vista de una playlist se muestra la duración total sumando todas sus canciones.
+- La duración se presenta en un formato legible (por ejemplo "1 h 23 min").
+- La duración total se actualiza automáticamente al agregar o quitar canciones.
+- Si la playlist está vacía, se muestra una duración de "0 min" o equivalente.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Dónde debe mostrarse la duración total?
+R: En ambos lugares
+
+Q: Formato cuando la playlist dura menos de 1 hora (ej: 23 min), ¿cómo lo mostramos?
+R: "23 min" (sin mencionar 0 h)
+
+Q: Si una canción no tiene duración conocida (duracionMs null, se ve como "--:--" en los resultados), ¿cómo la tratamos al sumar el total?
+R: Si una canción no tiene una duración conocida (duracionMs: null), se muestra como --:-- en la interfaz y se ignora al calcular la duración total de la playlist. Es decir, no contribuye a la suma y equivale a sumar 0 únicamente para efectos del cálculo. Las demás canciones con duración válida sí se incluyen normalmente.
+```
+
+**Resultado:**
+
+1. Playlist.js — 2 getters nuevos (duracionTotalMs, duracionTotalFormateada)
+2. index.html — 1 elemento nuevo (#detalle-playlist-duracion)
+3. ui.js — 1 referencia DOM + 2 líneas en templates existentes
+4. styles.css — 1 bloque de estilos

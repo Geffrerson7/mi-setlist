@@ -467,8 +467,23 @@ input:focus-visible {
   font-family: var(--fuente-mono);
   font-size: 0.75rem;
   color: var(--color-muted);
-  display: block;
   letter-spacing: 0.02em;
+}
+
+.resultado-item small {
+  display: block;
+}
+
+.playlist-item span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.icono-duracion-mini {
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .playlists-vacio {
@@ -513,6 +528,22 @@ input:focus-visible {
 /* === Card de playlist con botón "Ver" === */
 .playlist-item {
   justify-content: space-between;
+}
+
+.detalle-duracion {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--fuente-mono);
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.detalle-duracion svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
 
 .btn-ver-playlist {
