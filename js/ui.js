@@ -31,6 +31,33 @@ const detallePlaylistNombre = document.getElementById(
 const listaCancionesPlaylist = document.getElementById(
   "lista-canciones-playlist",
 );
+const btnEliminarPlaylist = document.getElementById("btn-eliminar-playlist");
+
+const overlayConfirmarQuitarCancion = document.getElementById(
+  "overlay-confirmar-quitar-cancion",
+);
+const textoConfirmarQuitarCancion = document.getElementById(
+  "texto-confirmar-quitar-cancion",
+);
+const btnCancelarQuitarCancion = document.getElementById(
+  "btn-cancelar-quitar-cancion",
+);
+const btnConfirmarQuitarCancion = document.getElementById(
+  "btn-confirmar-quitar-cancion",
+);
+
+const overlayConfirmarEliminarPlaylist = document.getElementById(
+  "overlay-confirmar-eliminar-playlist",
+);
+const textoConfirmarEliminarPlaylist = document.getElementById(
+  "texto-confirmar-eliminar-playlist",
+);
+const btnCancelarEliminarPlaylist = document.getElementById(
+  "btn-cancelar-eliminar-playlist",
+);
+const btnConfirmarEliminarPlaylist = document.getElementById(
+  "btn-confirmar-eliminar-playlist",
+);
 
 export function render(estado) {
   renderBotonBuscar();
@@ -44,6 +71,8 @@ export function render(estado) {
     estado.busqueda.resultados,
     estado.playlists,
   );
+  renderModalQuitarCancion(estado.modalConfirmarQuitarCancion);
+  renderModalEliminarPlaylist(estado.modalConfirmarEliminarPlaylist);
   renderTabs(estado.vistaActiva);
   renderEqMasthead(estado.busqueda.status);
   renderToast(estado.toast);
@@ -138,6 +167,20 @@ function renderPlaylists(playlists) {
     `,
     )
     .join("");
+}
+
+function renderModalQuitarCancion({ abierto, cancionTitulo }) {
+  overlayConfirmarQuitarCancion.classList.toggle("oculto", !abierto);
+  if (abierto) {
+    textoConfirmarQuitarCancion.textContent = `¿Quitar "${cancionTitulo}" de esta playlist?`;
+  }
+}
+
+function renderModalEliminarPlaylist({ abierto, playlistNombre }) {
+  overlayConfirmarEliminarPlaylist.classList.toggle("oculto", !abierto);
+  if (abierto) {
+    textoConfirmarEliminarPlaylist.textContent = `¿Eliminar la playlist "${playlistNombre}" y todas sus canciones? Esta acción no se puede deshacer.`;
+  }
 }
 
 function renderModal({ tipo, error }) {
@@ -287,6 +330,30 @@ export function inicializarModalAgregar({
   });
 }
 
+export function inicializarModalesConfirmacion({
+  onCancelarQuitarCancion,
+  onConfirmarQuitarCancion,
+  onCancelarEliminarPlaylist,
+  onConfirmarEliminarPlaylist,
+}) {
+  btnCancelarQuitarCancion.addEventListener("click", onCancelarQuitarCancion);
+  cerrarAlClickAfuera(overlayConfirmarQuitarCancion, onCancelarQuitarCancion);
+  btnConfirmarQuitarCancion.addEventListener("click", onConfirmarQuitarCancion);
+
+  btnCancelarEliminarPlaylist.addEventListener(
+    "click",
+    onCancelarEliminarPlaylist,
+  );
+  cerrarAlClickAfuera(
+    overlayConfirmarEliminarPlaylist,
+    onCancelarEliminarPlaylist,
+  );
+  btnConfirmarEliminarPlaylist.addEventListener(
+    "click",
+    onConfirmarEliminarPlaylist,
+  );
+}
+
 function cerrarAlClickAfuera(overlay, onCerrar) {
   overlay.addEventListener("click", (evento) => {
     if (evento.target === overlay) {
@@ -324,24 +391,44 @@ function renderVistaPlaylists(playlists, playlistSeleccionadaId) {
   listaCancionesPlaylist.innerHTML = playlistSeleccionada.canciones
     .map(
       ({ cancion, fechaAgregado }) => `
-      <li class="resultado-item">
-        <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" />
-        <div>
-          <strong>${cancion.titulo}</strong> — ${cancion.duracionFormateada}
-          <br />
-          <small>${cancion.artista} · Agregada el ${formatearFecha(fechaAgregado)}</small>
-        </div>
-      </li>
-    `,
+    <li class="resultado-item">
+      <img src="${cancion.caratula}" alt="Carátula de ${cancion.titulo}" />
+      <div>
+        <strong>${cancion.titulo}</strong> — ${cancion.duracionFormateada}
+        <br />
+        <small>${cancion.artista} · Agregada el ${formatearFecha(fechaAgregado)}</small>
+      </div>
+      <button
+        type="button"
+        class="btn-quitar-cancion"
+        data-cancion-id="${cancion.id}"
+        aria-label="Quitar ${cancion.titulo} de la playlist"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+      </button>
+    </li>
+  `,
     )
     .join("");
 }
 
-export function inicializarVistaDetallePlaylist({ onSeleccionar, onVolver }) {
+export function inicializarVistaDetallePlaylist({
+  onSeleccionar,
+  onVolver,
+  onAbrirQuitarCancion,
+  onAbrirEliminarPlaylist,
+}) {
   listaPlaylists.addEventListener("click", (evento) => {
     const btn = evento.target.closest(".btn-ver-playlist");
     if (btn) onSeleccionar(btn.dataset.playlistId);
   });
 
   btnVolverPlaylists.addEventListener("click", onVolver);
+
+  listaCancionesPlaylist.addEventListener("click", (evento) => {
+    const btn = evento.target.closest(".btn-quitar-cancion");
+    if (btn) onAbrirQuitarCancion(btn.dataset.cancionId);
+  });
+
+  btnEliminarPlaylist.addEventListener("click", onAbrirEliminarPlaylist);
 }

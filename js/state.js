@@ -10,6 +10,17 @@ let estado = {
   toast: { mensaje: null },
   cancionPendiente: null,
   playlistSeleccionadaId: null,
+  modalConfirmarQuitarCancion: {
+    abierto: false,
+    playlistId: null,
+    cancionId: null,
+    cancionTitulo: null,
+  },
+  modalConfirmarEliminarPlaylist: {
+    abierto: false,
+    playlistId: null,
+    playlistNombre: null,
+  },
 };
 
 const listeners = [];
@@ -172,4 +183,99 @@ export function seleccionarPlaylist(playlistId) {
 
 export function volverAListaPlaylists() {
   actualizarEstado({ playlistSeleccionadaId: null });
+}
+
+export function abrirModalQuitarCancion(playlistId, cancionId) {
+  const playlist = estado.playlists.find((p) => p.id === playlistId);
+  const entrada = playlist?.canciones.find(
+    (e) => e.cancion.id === Number(cancionId),
+  );
+  if (!entrada) return;
+
+  actualizarEstado({
+    modalConfirmarQuitarCancion: {
+      abierto: true,
+      playlistId,
+      cancionId: Number(cancionId),
+      cancionTitulo: entrada.cancion.titulo,
+    },
+  });
+}
+
+export function cerrarModalQuitarCancion() {
+  actualizarEstado({
+    modalConfirmarQuitarCancion: {
+      abierto: false,
+      playlistId: null,
+      cancionId: null,
+      cancionTitulo: null,
+    },
+  });
+}
+
+export function confirmarQuitarCancion() {
+  const { playlistId, cancionId } = estado.modalConfirmarQuitarCancion;
+
+  const playlistsActualizadas = estado.playlists.map((p) =>
+    p.id === playlistId
+      ? new Playlist({
+          ...p,
+          canciones: p.canciones.filter((e) => e.cancion.id !== cancionId),
+          fechaEdicion: new Date(),
+        })
+      : p,
+  );
+
+  actualizarEstado({
+    playlists: playlistsActualizadas,
+    modalConfirmarQuitarCancion: {
+      abierto: false,
+      playlistId: null,
+      cancionId: null,
+      cancionTitulo: null,
+    },
+  });
+  mostrarToast("✓ Canción quitada de la playlist");
+}
+
+export function abrirModalEliminarPlaylist(playlistId) {
+  const playlist = estado.playlists.find((p) => p.id === playlistId);
+  if (!playlist) return;
+
+  actualizarEstado({
+    modalConfirmarEliminarPlaylist: {
+      abierto: true,
+      playlistId,
+      playlistNombre: playlist.nombre,
+    },
+  });
+}
+
+export function cerrarModalEliminarPlaylist() {
+  actualizarEstado({
+    modalConfirmarEliminarPlaylist: {
+      abierto: false,
+      playlistId: null,
+      playlistNombre: null,
+    },
+  });
+}
+
+export function confirmarEliminarPlaylist() {
+  const { playlistId, playlistNombre } = estado.modalConfirmarEliminarPlaylist;
+
+  const playlistsActualizadas = estado.playlists.filter(
+    (p) => p.id !== playlistId,
+  );
+
+  actualizarEstado({
+    playlists: playlistsActualizadas,
+    playlistSeleccionadaId: null, // volvemos a la lista general automáticamente
+    modalConfirmarEliminarPlaylist: {
+      abierto: false,
+      playlistId: null,
+      playlistNombre: null,
+    },
+  });
+  mostrarToast(`✓ Playlist "${playlistNombre}" eliminada`);
 }
