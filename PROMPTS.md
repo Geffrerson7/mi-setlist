@@ -573,9 +573,10 @@ A: Mostrar un toast avisando que no se pudo guardar
 ```
 
 **Resultado:**
-1) js/storage.js (nuevo archivo)
-2) js/state.js — cargar desde storage al iniciar el estado
-3) js/app.js — guardar automáticamente en cada cambio (con guard)
+
+1. js/storage.js (nuevo archivo)
+2. js/state.js — cargar desde storage al iniciar el estado
+3. js/app.js — guardar automáticamente en cada cambio (con guard)
 
 ## 19/07/2026 — Actualización del README.md
 
@@ -614,7 +615,7 @@ Este proyecto usa módulos ESM, por lo que **no funciona abriendo index.html dir
    bash
    git clone https://github.com/tu-usuario/mi-setlist.git
    cd mi-setlist
-   
+
 2. Abir la carpeta del proyecto en VS Code.
 3. Instalar la extensión **Live Server** (si no la tenés).
 4. Hacer clic derecho sobre index.html y seleccioná **"Open with Live Server"**.
@@ -658,4 +659,83 @@ A: Sí, agregar Playlist.js y corregir el desalineado de api.js
 ```
 
 **Resultado:**
-1) Nuevo README.md con informacion de actualizada del SPRINT 1
+
+1. Nuevo README.md con informacion de actualizada del SPRINT 1
+
+## 21/07/2026 — Auditoría con Copilot
+
+**Para qué:** Encontrar problemas entre archivos que un chat viendo un archivo suelto no ve.
+**Prompt:**
+
+```
+@workspace Haz un code review de mi proyecto.
+Busca específicamente: mutaciones directas del
+estado, faltas de try/catch en storage.js, render olvidado tras
+cambios de estado, funciones exportadas que nadie importa, ids que
+no usan randomUUID , fechas sin rehidratar al cargar y demas errores posibles.
+
+FORMATO: Lista de hallazgos con archivo y línea, cada uno con
+severidad (crítico / mayor / menor) y por qué.
+
+RESTRICCIONES: NO edites ningún archivo ni me des código corregido
+todavía. Solo hallazgos.
+
+Críticos (rompen la app): se arreglan AHORA, un hallazgo, una porción, probar.
+Mayores (deuda, flujo confuso): se anotan como ítems del SPRINTS.md en una seccion de Code Review.
+Menores (pulido): se descartan. Hoy no hay tiempo para cosmética.
+```
+
+**Resultado:**
+
+```
+Hallazgos
+ui.js line 219
+
+Severidad: mayor
+Por qué: renderModalAgregar() hace resultados.find((c) => c.id === cancionId) pero cancionId viene de dataset como string mientras que los IDs de iTunes son numéricos. Esto impide mostrar correctamente la canción seleccionada en el modal de agregar.
+state.js líneas 124-125
+
+Severidad: mayor
+Por qué: abrirModalNuevaPlaylistDesdeAgregar() usa estado.busqueda.resultados.find((c) => c.id === cancionId). La comparación string/number falla, por lo que la canción pendiente no se recupera al crear una playlist desde el modal de agregar.
+state.js línea 141
+
+Severidad: mayor
+Por qué: agregarCancionAPlaylist() comprueba duplicados con entrada.cancion.id === cancionId. Si cancionId es string, la comparación numérica falla y puede permitir canciones duplicadas en la playlist.
+Notas de verificación
+```
+
+## 22/07/2026 — Implementación HU7
+
+**Para qué:** Implementar la HU1..
+**Prompt:**
+
+```
+Ahora empecemos con el sprint 2:
+TAREA: Implementemos JUNTOS esta historia:
+HU-07: Quitar canciones y eliminar playlists con confirmación
+**Sprint:** 2
+**Prioridad:** Media
+
+Como usuario, quiero quitar canciones de una playlist y eliminar playlists completas confirmando antes cada acción, para depurar mi música y evitar borrados accidentales.
+
+**Criterios de aceptación:**
+- Cada canción dentro de una playlist tiene una opción para quitarla, y cada playlist tiene una opción visible para eliminarla completa.
+- Antes de eliminar una canción o una playlist, se muestra un modal propio pidiendo confirmación (indicando qué se va a eliminar).
+- Si confirmo, el elemento correspondiente (canción o playlist con todas sus canciones) desaparece inmediatamente de la vista.
+- Si cancelo, no se realiza ningún cambio.
+- El cambio se mantiene luego de recargar la página.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+```
+
+**Resultado:**
+
+1. Dos modales de confirmación nuevos (uno para quitar canción, otro para eliminar playlist), cada uno con su propio overlay en el HTML.
+2. Botón "Quitar" por canción, dentro de la lista de la vista de detalle.
+3. Botón "Eliminar playlist" único, visible solo en la vista de detalle (por ejemplo debajo del nombre).
