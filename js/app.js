@@ -14,13 +14,14 @@ import {
   filtrarPlaylistsEnModal,
   seleccionarPlaylist,
   volverAListaPlaylists,
-  abrirModalQuitarCancion, // ← nueva
-  cerrarModalQuitarCancion, // ← nueva
-  confirmarQuitarCancion, // ← nueva
-  abrirModalEliminarPlaylist, // ← nueva
-  cerrarModalEliminarPlaylist, // ← nueva
+  abrirModalQuitarCancion,
+  cerrarModalQuitarCancion,
+  confirmarQuitarCancion,
+  abrirModalEliminarPlaylist,
+  cerrarModalEliminarPlaylist,
   confirmarEliminarPlaylist,
   cambiarOrdenPlaylist,
+  cerrarModalDatosCorruptos,
 } from "./state.js";
 import {
   render,
@@ -31,6 +32,7 @@ import {
   inicializarModalAgregar,
   inicializarVistaDetallePlaylist,
   inicializarModalesConfirmacion,
+  inicializarModalDatosCorruptos,
 } from "./ui.js";
 import { guardarPlaylists } from "./storage.js";
 
@@ -124,6 +126,7 @@ function iniciar() {
     onCancelarEliminarPlaylist: cerrarModalEliminarPlaylist,
     onConfirmarEliminarPlaylist: confirmarEliminarPlaylist,
   });
+  inicializarModalDatosCorruptos(cerrarModalDatosCorruptos);
 }
 
 iniciar();

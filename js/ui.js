@@ -67,13 +67,17 @@ const estadisticaCantidad = document.getElementById("estadistica-cantidad");
 const estadisticaGenero = document.getElementById("estadistica-genero");
 const estadisticaArtista = document.getElementById("estadistica-artista");
 const selectOrdenCanciones = document.getElementById("select-orden-canciones");
+const overlayDatosCorruptos = document.getElementById(
+  "overlay-datos-corruptos",
+);
+const btnEmpezarDeCero = document.getElementById("btn-empezar-de-cero");
 
 export function render(estado) {
   renderBotonBuscar();
   renderMensajeBusqueda(estado.busqueda);
   renderResultados(estado.busqueda.resultados);
   renderPlaylists(estado.playlists);
-  renderVistaPlaylists(estado.playlists, estado.playlistSeleccionadaId); // ← nueva línea
+  renderVistaPlaylists(estado.playlists, estado.playlistSeleccionadaId);
   renderModal(estado.modal);
   renderModalAgregar(
     estado.modalAgregar,
@@ -82,6 +86,7 @@ export function render(estado) {
   );
   renderModalQuitarCancion(estado.modalConfirmarQuitarCancion);
   renderModalEliminarPlaylist(estado.modalConfirmarEliminarPlaylist);
+  renderModalDatosCorruptos(estado.modalDatosCorruptos);
   renderTabs(estado.vistaActiva);
   renderEqMasthead(estado.busqueda.status);
   renderToast(estado.toast);
@@ -194,6 +199,10 @@ function renderModalEliminarPlaylist({ abierto, playlistNombre }) {
   if (abierto) {
     textoConfirmarEliminarPlaylist.textContent = `¿Eliminar la playlist "${playlistNombre}" y todas sus canciones? Esta acción no se puede deshacer.`;
   }
+}
+
+function renderModalDatosCorruptos({ abierto }) {
+  overlayDatosCorruptos.classList.toggle("oculto", !abierto);
 }
 
 function renderModal({ tipo, error }) {
@@ -466,4 +475,8 @@ export function inicializarVistaDetallePlaylist({
   selectOrdenCanciones.addEventListener("change", () => {
     onCambiarOrden(selectOrdenCanciones.value);
   });
+}
+
+export function inicializarModalDatosCorruptos(onCerrar) {
+  btnEmpezarDeCero.addEventListener("click", onCerrar);
 }

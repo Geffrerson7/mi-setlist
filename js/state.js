@@ -1,9 +1,11 @@
 import { Playlist } from "./models/Playlist.js";
 import { cargarPlaylists } from "./storage.js";
 
+const { playlists: playlistsIniciales, datosCorruptos } = cargarPlaylists();
+
 let estado = {
   busqueda: { status: "idle", resultados: [], mensajeError: null },
-  playlists: cargarPlaylists(),
+  playlists: playlistsIniciales,
   modal: { tipo: null, error: null },
   modalAgregar: { abierto: false, cancionId: null, filtro: "" },
   vistaActiva: "busqueda",
@@ -21,6 +23,7 @@ let estado = {
     playlistId: null,
     playlistNombre: null,
   },
+  modalDatosCorruptos: { abierto: datosCorruptos },
 };
 
 const listeners = [];
@@ -288,4 +291,8 @@ export function cambiarOrdenPlaylist(playlistId, nuevoCriterio) {
   );
 
   actualizarEstado({ playlists: playlistsActualizadas });
+}
+
+export function cerrarModalDatosCorruptos() {
+  actualizarEstado({ modalDatosCorruptos: { abierto: false } });
 }
