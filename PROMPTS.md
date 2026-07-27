@@ -856,6 +856,7 @@ R: Se recuerda por playlist (persiste en localStorage junto con sus canciones)
 ```
 
 **Resultado:**
+
 1. **Playlist.js** — campo `ordenCriterio` en el constructor + getter `cancionesOrdenadas`
 2. **storage.js** — leer `ordenCriterio` al rehidratar (con fallback a `"recientes"`)
 3. **state.js** — función `cambiarOrdenPlaylist`
@@ -863,3 +864,44 @@ R: Se recuerda por playlist (persiste en localStorage junto con sus canciones)
 5. **ui.js** — referencia DOM, sincronizar `<select>`, usar `cancionesOrdenadas`, wiring del evento `change`
 6. **app.js** — import + handler `onCambiarOrden`
 7. **styles.css** — `.detalle-orden` y sus hijos
+
+## 27/07/2026 — Implementación HU10
+
+**Para qué:** Implementar la HU10.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-11: Recuperación ante datos corruptos
+**Sprint:** 2
+**Prioridad:** Baja
+Como usuario, quiero que la aplicación siga funcionando aunque mis datos guardados estén dañados, para no quedarme sin poder usarla.
+**Criterios de aceptación:**
+- Si los datos guardados no pueden leerse correctamente, la aplicación no se rompe ni queda en blanco.
+- Se muestra un mensaje explicando que hubo un problema con los datos guardados.
+- Se ofrece una opción de "Empezar de cero" que permite seguir usando la aplicación con una nueva playlist vacía.
+- Al elegir "Empezar de cero", la aplicación queda en un estado limpio y utilizable.
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Cómo mostramos el aviso de datos corruptos?
+R: Modal bloqueante (como los de confirmación) que hay que cerrar con esa acción
+
+Q: Al detectar datos corruptos, ¿limpiamos el localStorage dañado en el momento, o esperamos a que el usuario elija "Empezar de cero" para recिén ahí borrarlo?
+R: Sí, borrar el localStorage corrupto de inmediato al detectarlo
+
+Q:Cuando un usuario entra por primera vez (sin ningún dato guardado aún, caso normal), ¿eso debe verse igual que la pantalla de 'sin playlists' actual, sin ningún aviso de error?
+R: la primera vez que el usuario entra y no existe ningún dato guardado, no debería mostrarse ningún aviso de error. Debe verse directamente la pantalla normal de “Sin playlists”
+```
+
+**Resultado:**
+
+1. **storage.js** — `cargarPlaylists` cambia de contrato `({ playlists, datosCorruptos })`, distingue "sin datos" de "corrupto", borra el localStorage dañado
+2. **state.js** — usa el nuevo contrato al inicializar, agrega `modalDatosCorruptos` al estado, función `cerrarModalDatosCorruptos`
+3. **index.html** — nuevo overlay `#overlay-datos-corruptos`
+4. **ui.js** — referencias DOM, render, e inicialización del modal
+5. **app.js** — import + wiring

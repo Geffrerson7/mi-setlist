@@ -13,18 +13,32 @@ export function guardarPlaylists(playlists) {
 }
 
 export function cargarPlaylists() {
+  const crudo = localStorage.getItem(CLAVE_STORAGE);
+
+  if (!crudo) {
+    // No hay nada guardado todavía: caso normal de usuario nuevo, no es un error.
+    return { playlists: [], datosCorruptos: false };
+  }
+
   try {
-    const crudo = localStorage.getItem(CLAVE_STORAGE);
-    if (!crudo) return [];
-
     const datos = JSON.parse(crudo);
-    if (!Array.isArray(datos)) return [];
+    if (!Array.isArray(datos)) {
+      throw new Error("El formato guardado no es una lista de playlists");
+    }
 
-    return datos.map(rehidratarPlaylist);
+    const playlists = datos.map(rehidratarPlaylist);
+    return { playlists, datosCorruptos: false };
   } catch {
-    // Datos corruptos: por ahora arrancamos vacío en vez de romper la app.
-    // El flujo completo de "Empezar de cero" con aviso al usuario es HU-11.
-    return [];
+    // Datos corruptos (JSON inválido, estructura inesperada, o alguna
+    // playlist/canción con forma incorrecta): descartamos lo guardado
+    // para no dejar la app en un estado inconsistente.
+    try {
+      localStorage.removeItem(CLAVE_STORAGE);
+    } catch {
+      // Si ni siquiera se puede borrar, igual seguimos con estado vacío
+      // en memoria; la app sigue siendo usable en esta sesión.
+    }
+    return { playlists: [], datosCorruptos: true };
   }
 }
 
