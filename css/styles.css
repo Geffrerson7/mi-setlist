@@ -300,6 +300,50 @@ input:focus-visible {
   color: var(--color-muted);
 }
 
+.campo-busqueda {
+  position: relative;
+  flex: 1;
+  display: flex;
+}
+
+.campo-busqueda #input-busqueda {
+  width: 100%;
+  padding-right: 2.5rem; /* deja espacio para que el texto no quede debajo del ✕ */
+}
+
+.btn-limpiar-busqueda {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-muted);
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    color var(--transicion),
+    background-color var(--transicion);
+}
+
+.btn-limpiar-busqueda:hover {
+  color: var(--color-accent-2);
+  background-color: rgba(var(--accent-2-rgb), 0.1);
+}
+
+.btn-limpiar-busqueda:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-accent);
+}
+
 #btn-buscar {
   width: 100%;
   padding: 0.7rem 1.4rem;

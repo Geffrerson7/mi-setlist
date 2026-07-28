@@ -205,6 +205,20 @@ Como usuario, quiero escuchar una previsualización de una canción, para decidi
 - Si una canción no tiene previsualización disponible, no se muestra el botón de reproducción (o se muestra deshabilitado con una indicación de que no hay audio disponible).
 - Al salir de la sección de búsqueda o cerrar/recargar la página, cualquier previsualización en curso se detiene.
 
+### HU-13: Limpiar rápidamente el campo de búsqueda
+
+**Sprint:** Post-MVP
+**Prioridad:** Media
+
+Como usuario, quiero limpiar el texto de búsqueda con un solo clic, para realizar una nueva búsqueda más rápidamente.
+
+**Criterios de aceptación:**
+
+- Cuando el campo de búsqueda contiene texto, se muestra un botón para limpiarlo.
+- Al seleccionar el botón, el campo queda vacío.
+- El foco permanece en el campo de búsqueda para permitir escribir inmediatamente una nueva consulta.
+- La interfaz vuelve al estado inicial de búsqueda.
+
 ---
 
 ## Resumen de priorización
@@ -213,6 +227,6 @@ Como usuario, quiero escuchar una previsualización de una canción, para decidi
 | --------------- | -------------- | ----------------------------------------------------------------------------------------------- |
 | Sprint 1        | HU-01 a HU-06  | Búsqueda, creación de playlists, agregado de canciones y persistencia básica                    |
 | Sprint 2        | HU-07 a HU-11  | Eliminación con confirmación, métricas (duración y estadísticas), orden y robustez ante errores |
-| Sprint Post-MVP | HU-012 a HU-13 | Previsualización de canciones y limpieza del campo de búsqueda                                  |
+| Sprint Post-MVP | HU-12 a HU-13 | Previsualización de canciones y limpieza del campo de búsqueda                                  |
 
 **Total de historias:** 11
