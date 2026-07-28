@@ -71,6 +71,10 @@ const overlayDatosCorruptos = document.getElementById(
   "overlay-datos-corruptos",
 );
 const btnEmpezarDeCero = document.getElementById("btn-empezar-de-cero");
+const reproductorPreview = document.getElementById("reproductor-preview");
+const ICONO_PLAY = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>`;
+
+const ICONO_PAUSE = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-pause"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /><path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" /></svg>`;
 
 export function render(estado) {
   renderBotonBuscar();
@@ -130,6 +134,16 @@ function renderResultados(resultados) {
           <br />
           <small>${cancion.artista}</small>
         </div>
+        <button
+          type="button"
+          class="btn-preview"
+          data-cancion-id="${cancion.id}"
+          data-preview-url="${cancion.previewUrl ?? ""}"
+          ${cancion.previewUrl ? "" : "disabled"}
+          aria-label="${cancion.previewUrl ? `Escuchar preview de ${cancion.titulo}` : "Sin preview disponible"}"
+        >
+          <span class="icono-play" aria-hidden="true">${ICONO_PLAY}</span>
+        </button>
         <button type="button" class="btn-agregar" data-cancion-id="${cancion.id}">
           + Agregar a
         </button>
@@ -352,6 +366,21 @@ export function inicializarModalAgregar({
   });
 }
 
+export function inicializarPreview({ onTogglePreview }) {
+  listaResultados.addEventListener("click", (evento) => {
+    const btn = evento.target.closest(".btn-preview");
+    if (btn && !btn.disabled) {
+      onTogglePreview(btn.dataset.cancionId);
+    }
+  });
+
+  // Cuando el audio termina solo (sin que el usuario lo pause),
+  // avisamos para resetear el ícono a ▶.
+  reproductorPreview.addEventListener("ended", () => {
+    onTogglePreview(null, { forzarDetener: true });
+  });
+}
+
 export function inicializarModalesConfirmacion({
   onCancelarQuitarCancion,
   onConfirmarQuitarCancion,
@@ -449,6 +478,41 @@ function renderVistaPlaylists(playlists, playlistSeleccionadaId) {
   `,
     )
     .join("");
+}
+
+export function renderPlayer(estado) {
+  const { cancionId, reproduciendo } = estado.previewActivo;
+
+  document.querySelectorAll(".btn-preview").forEach((btn) => {
+    const esElBotonActivo = Number(btn.dataset.cancionId) === cancionId;
+    const iconoSpan = btn.querySelector(".icono-play");
+    const activo = esElBotonActivo && reproduciendo;
+
+    btn.classList.toggle("btn-preview--activo", activo);
+    iconoSpan.innerHTML = activo ? ICONO_PAUSE : ICONO_PLAY;
+  });
+
+  if (!cancionId) {
+    reproductorPreview.pause();
+    reproductorPreview.removeAttribute("src");
+    return;
+  }
+
+  const btnActivo = document.querySelector(
+    `.btn-preview[data-cancion-id="${cancionId}"]`,
+  );
+  const previewUrl = btnActivo?.dataset.previewUrl;
+
+  if (reproduciendo) {
+    if (reproductorPreview.src !== previewUrl) {
+      reproductorPreview.src = previewUrl;
+    }
+    reproductorPreview.play().catch(() => {
+      // Ver nota sobre autoplay policy en el paso original.
+    });
+  } else {
+    reproductorPreview.pause();
+  }
 }
 
 export function inicializarVistaDetallePlaylist({

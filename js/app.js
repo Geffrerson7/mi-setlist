@@ -22,6 +22,10 @@ import {
   confirmarEliminarPlaylist,
   cambiarOrdenPlaylist,
   cerrarModalDatosCorruptos,
+  suscribirsePreview,
+  reproducirPreview,
+  pausarPreview,
+  detenerPreview,
 } from "./state.js";
 import {
   render,
@@ -33,6 +37,8 @@ import {
   inicializarVistaDetallePlaylist,
   inicializarModalesConfirmacion,
   inicializarModalDatosCorruptos,
+  renderPlayer,
+  inicializarPreview,
 } from "./ui.js";
 import { guardarPlaylists } from "./storage.js";
 
@@ -41,6 +47,7 @@ let ultimasPlaylistsGuardadas = null;
 
 async function manejarBusqueda(termino) {
   const idDeEstaBusqueda = ++idBusquedaActual;
+  detenerPreview();
 
   actualizarEstado({
     busqueda: { status: "loading", resultados: [], mensajeError: null },
@@ -82,9 +89,28 @@ function persistirPlaylists(estadoActual) {
   }
 }
 
+function manejarTogglePreview(cancionId, opciones = {}) {
+  if (opciones.forzarDetener) {
+    detenerPreview();
+    return;
+  }
+
+  const { previewActivo } = getEstado();
+  const idNumerico = Number(cancionId);
+  const esLaMismaQueSuena = previewActivo.cancionId === idNumerico;
+
+  if (esLaMismaQueSuena && previewActivo.reproduciendo) {
+    pausarPreview();
+  } else {
+    reproducirPreview(idNumerico);
+  }
+}
+
 function iniciar() {
   suscribirse(render);
   suscribirse(persistirPlaylists);
+  suscribirsePreview(renderPlayer);
+
   inicializarInputBusqueda();
   inicializarFormularioBusqueda(manejarBusqueda);
   inicializarModalNuevaPlaylist({
@@ -103,6 +129,8 @@ function iniciar() {
     onCrearDesdeAgregar: abrirModalNuevaPlaylistDesdeAgregar,
     onFiltrar: filtrarPlaylistsEnModal,
   });
+  inicializarPreview({ onTogglePreview: manejarTogglePreview });
+
   render(getEstado());
   inicializarVistaDetallePlaylist({
     onSeleccionar: seleccionarPlaylist,

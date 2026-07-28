@@ -1,11 +1,20 @@
 export class Cancion {
-  constructor({ id, titulo, artista, caratula, duracionMs, genero }) {
+  constructor({
+    id,
+    titulo,
+    artista,
+    caratula,
+    duracionMs,
+    genero,
+    previewUrl,
+  }) {
     this.id = id;
     this.titulo = titulo;
     this.artista = artista;
     this.caratula = caratula;
     this.duracionMs = duracionMs;
     this.genero = genero;
+    this.previewUrl = previewUrl ?? null;
   }
 
   get duracionFormateada() {
