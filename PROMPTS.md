@@ -929,6 +929,13 @@ casos borde, estructura de datos). Espera mis respuestas. Después
 dame el código en porciones pequeñas, explicando qué hace cada una
 y en qué archivo va.
 RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: ¿Dónde debería vivir el estado de "qué canción se está reproduciendo"? Es un dato transitorio (no se persiste, no afecta playlists).
+R: Guardar el estado en el estado central de state.js, pero considera el reproductor como una isla de UI con su propio renderPlayer() para evitar un render completo innecesario.
+Q: Cuando una canción no tiene previsualización disponible, ¿qué preferís?
+R: Mostrarlo deshabilitado (gris, sin acción) indicando que no hay audio
+Q: El criterio dice "al salir de la sección de búsqueda" se detiene la previsualización. ¿Eso incluye cambiar de pestaña (tab) a "Mis playlists"?
+R: Sí, detenerla automáticamente al cambiar a la pestaña "Mis playlists"
 ```
 
 **Resultado:**
@@ -940,3 +947,42 @@ RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores.
 5. **ui.js** — botón en `renderResultados`, función `renderPlayer`, `inicializarPreview`
 6. **app.js** — imports, `manejarTogglePreview`, suscripción al canal separado, ajuste a `manejarBusqueda`
 7. **styles.css** — `.btn-preview` y variantes
+
+## 27/07/2026 — Implementación HU13
+
+**Para qué:** Implementar la HU13.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-13: Limpiar rápidamente el campo de búsqueda
+
+Como usuario, quiero limpiar el texto de búsqueda con un solo clic, para realizar una nueva búsqueda más rápidamente.
+
+Criterios de aceptación:
+
+Cuando el campo de búsqueda contiene texto, se muestra un botón para limpiarlo.
+Al seleccionar el botón, el campo queda vacío.
+El foco permanece en el campo de búsqueda para permitir escribir inmediatamente una nueva consulta.
+La interfaz vuelve al estado inicial de búsqueda.
+
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+
+Q: "La interfaz vuelve al estado inicial de búsqueda" — ¿hasta dónde llega eso?
+R: Vacía el input Y borra los resultados/mensaje, volviendo la pantalla al estado 'idle' (como recién entrando)
+Q: ¿Dónde va visualmente el botón de limpiar?
+R: Un ícono (✕) dentro del propio input, a la derecha del texto
+```
+
+**Resultado:**
+
+1. **index.html** — `<div class="campo-busqueda">` envolviendo el input + botón `#btn-limpiar-busqueda`
+2. **state.js** — función `limpiarBusqueda`
+3. **ui.js** — referencia DOM, `renderBotonBuscar` ampliada, `inicializarLimpiarBusqueda`
+4. **app.js** — import + wiring en `iniciar()`
+5. **styles.css** — `.campo-busqueda`, ajuste a `#input-busqueda` dentro de ese contenedor, `.btn-limpiar-busqueda` y sus estados `:hover/:focus-visible`

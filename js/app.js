@@ -26,6 +26,7 @@ import {
   reproducirPreview,
   pausarPreview,
   detenerPreview,
+  limpiarBusqueda,
 } from "./state.js";
 import {
   render,
@@ -39,6 +40,7 @@ import {
   inicializarModalDatosCorruptos,
   renderPlayer,
   inicializarPreview,
+  inicializarLimpiarBusqueda,
 } from "./ui.js";
 import { guardarPlaylists } from "./storage.js";
 
@@ -155,6 +157,10 @@ function iniciar() {
     onConfirmarEliminarPlaylist: confirmarEliminarPlaylist,
   });
   inicializarModalDatosCorruptos(cerrarModalDatosCorruptos);
+  inicializarLimpiarBusqueda(() => {
+    idBusquedaActual++;
+    limpiarBusqueda();
+  });
 }
 
 iniciar();

@@ -325,3 +325,10 @@ export function pausarPreview() {
 export function detenerPreview() {
   actualizarPreview({ cancionId: null, reproduciendo: false });
 }
+
+export function limpiarBusqueda() {
+  actualizarEstado({
+    busqueda: { status: "idle", resultados: [], mensajeError: null },
+  });
+  detenerPreview();
+}

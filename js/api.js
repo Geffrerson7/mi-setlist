@@ -12,7 +12,7 @@ export async function buscarCanciones(termino) {
   } catch {
     // fetch rechaza la promesa cuando no hay conexión, DNS falla, etc.
     const errorRed = new Error(
-      "No hay conexión a internet. Revisá tu conexión e intentá de nuevo.",
+      "No hay conexión a internet. Revisa tu conexión e intenta de nuevo.",
     );
     errorRed.tipo = "red";
     throw errorRed;
@@ -20,7 +20,7 @@ export async function buscarCanciones(termino) {
 
   if (!respuesta.ok) {
     const errorServidor = new Error(
-      "El servidor de iTunes no respondió correctamente. Probá de nuevo en unos minutos.",
+      "El servidor de iTunes no respondió correctamente. Prueba de nuevo en unos minutos.",
     );
     errorServidor.tipo = "servidor";
     throw errorServidor;
