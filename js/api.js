@@ -37,6 +37,7 @@ export async function buscarCanciones(termino) {
         caratula: item.artworkUrl100,
         duracionMs: item.trackTimeMillis,
         genero: item.primaryGenreName,
+        previewUrl: item.previewUrl,
       }),
   );
 }

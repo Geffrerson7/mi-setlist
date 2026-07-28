@@ -24,9 +24,11 @@ let estado = {
     playlistNombre: null,
   },
   modalDatosCorruptos: { abierto: datosCorruptos },
+  previewActivo: { cancionId: null, reproduciendo: false },
 };
 
 const listeners = [];
+const listenersPreview = [];
 
 let toastTimeoutId = null;
 
@@ -106,6 +108,9 @@ export function crearPlaylist(nombre) {
 }
 
 export function cambiarVista(vista) {
+  if (vista !== "busqueda") {
+    detenerPreview();
+  }
   actualizarEstado({ vistaActiva: vista });
 }
 
@@ -295,4 +300,28 @@ export function cambiarOrdenPlaylist(playlistId, nuevoCriterio) {
 
 export function cerrarModalDatosCorruptos() {
   actualizarEstado({ modalDatosCorruptos: { abierto: false } });
+}
+
+export function suscribirsePreview(listener) {
+  listenersPreview.push(listener);
+}
+
+function actualizarPreview(cambios) {
+  estado = {
+    ...estado,
+    previewActivo: { ...estado.previewActivo, ...cambios },
+  };
+  listenersPreview.forEach((listener) => listener(estado));
+}
+
+export function reproducirPreview(cancionId) {
+  actualizarPreview({ cancionId: Number(cancionId), reproduciendo: true });
+}
+
+export function pausarPreview() {
+  actualizarPreview({ reproduciendo: false });
+}
+
+export function detenerPreview() {
+  actualizarPreview({ cancionId: null, reproduciendo: false });
 }

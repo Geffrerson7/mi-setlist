@@ -865,9 +865,9 @@ R: Se recuerda por playlist (persiste en localStorage junto con sus canciones)
 6. **app.js** — import + handler `onCambiarOrden`
 7. **styles.css** — `.detalle-orden` y sus hijos
 
-## 27/07/2026 — Implementación HU10
+## 27/07/2026 — Implementación HU11
 
-**Para qué:** Implementar la HU10.
+**Para qué:** Implementar la HU11.
 **Prompt:**
 
 ```
@@ -905,3 +905,38 @@ R: la primera vez que el usuario entra y no existe ningún dato guardado, no deb
 3. **index.html** — nuevo overlay `#overlay-datos-corruptos`
 4. **ui.js** — referencias DOM, render, e inicialización del modal
 5. **app.js** — import + wiring
+
+## 27/07/2026 — Implementación HU12
+
+**Para qué:** Implementar la HU12.
+**Prompt:**
+
+```
+TAREA: Implementemos JUNTOS esta historia:
+HU-12: Previsualización de canciones
+**Sprint:** Post-MVP
+**Prioridad:** Media
+Como usuario, quiero escuchar una previsualización de una canción, para decidir si quiero agregarla a mi playlist.
+**Criterios de aceptación:**
+- Cada resultado de búsqueda muestra un botón de reproducción (▶) si la canción tiene un audio de previsualización disponible.
+- Al presionar el botón, la previsualización comienza a reproducirse y el botón cambia a un ícono de pausa (⏸) para poder detenerla.
+- Si reproduzco la previsualización de una canción mientras otra ya está sonando, la anterior se detiene automáticamente (solo puede sonar una a la vez).
+- Si una canción no tiene previsualización disponible, no se muestra el botón de reproducción (o se muestra deshabilitado con una indicación de que no hay audio disponible).
+- Al salir de la sección de búsqueda o cerrar/recargar la página, cualquier previsualización en curso se detiene.
+MODO: Antes de escribir código, hazme las preguntas estratégicas necesarias
+sobre decisiones que me corresponden a mí (experiencia de usuario,
+casos borde, estructura de datos). Espera mis respuestas. Después
+dame el código en porciones pequeñas, explicando qué hace cada una
+y en qué archivo va.
+RESTRICCIONES: Respeta el contrato que te compartí en unos mensajes anteriores. No reescribas archivos que no te pedí. Si el contrato te impide algo, dímelo en vez de saltártelo.
+```
+
+**Resultado:**
+
+1. **Cancion.js** — campo `previewUrl`
+2. **api.js** — mapear `item.previewUrl`
+3. **state.js** — canal `listenersPreview` separado, `previewActivo`, `reproducirPreview/pausarPreview/detenerPreview`, ajuste a `cambiarVista`
+4. **index.html** — `<audio id="reproductor-preview">`
+5. **ui.js** — botón en `renderResultados`, función `renderPlayer`, `inicializarPreview`
+6. **app.js** — imports, `manejarTogglePreview`, suscripción al canal separado, ajuste a `manejarBusqueda`
+7. **styles.css** — `.btn-preview` y variantes
