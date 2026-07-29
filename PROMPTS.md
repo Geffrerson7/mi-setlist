@@ -986,3 +986,69 @@ R: Un ícono (✕) dentro del propio input, a la derecha del texto
 3. **ui.js** — referencia DOM, `renderBotonBuscar` ampliada, `inicializarLimpiarBusqueda`
 4. **app.js** — import + wiring en `iniciar()`
 5. **styles.css** — `.campo-busqueda`, ajuste a `#input-busqueda` dentro de ese contenedor, `.btn-limpiar-busqueda` y sus estados `:hover/:focus-visible`
+
+
+## 29/07/2026 — Segunda Auditoría con Copilot
+
+**Para qué:** Encontrar bugs en el código.
+**Prompt:**
+
+```
+@workspace Haz un code review de mi proyecto.
+Busca específicamente: mutaciones directas del
+estado, faltas de try/catch en storage.js, render olvidado tras
+cambios de estado, funciones exportadas que nadie importa, ids que
+no usan randomUUID , fechas sin rehidratar al cargar y demas errores posibles.
+
+FORMATO: Lista de hallazgos con archivo y línea, cada uno con
+severidad (crítico / mayor / menor) y por qué.
+
+RESTRICCIONES: NO edites ningún archivo ni me des código corregido
+todavía. Solo hallazgos.
+
+Críticos (rompen la app): se arreglan AHORA, un hallazgo, una porción, probar.
+Mayores (deuda, flujo confuso): se anotan como ítems del SPRINTS.md en una seccion de Code Review.
+Menores (pulido): se descartan. Hoy no hay tiempo para cosmética.
+```
+
+**Resultado:**
+```
+storage.js línea 16
+
+Severidad: crítico
+Por qué: localStorage.getItem(CLAVE_STORAGE) no está envuelto en try/catch. Si el navegador bloquea el acceso a localStorage (modo incógnito, políticas de privacidad, sandbox, etc.), la app puede fallar al iniciar.
+state.js líneas 142-149
+
+Severidad: mayor
+Por qué: en abrirModalNuevaPlaylistDesdeAgregar, se busca la canción con c.id === cancionId, pero cancionId llega como string desde el DOM mientras c.id es numérico. Eso rompe el flujo de “crear playlist desde agregar canción” y deja cancionPendiente como null.
+state.js líneas 152-161
+
+Severidad: mayor
+Por qué: hay manejo inconsistente de tipos de ID entre strings del DOM (dataset.cancionId) y valores numéricos en el estado/resultados. Esto hace que las búsquedas y comparaciones de canciones sean frágiles y dependan de conversiones explícitas en algunos lugares, pero no en todos.
+state.js líneas 196-207
+
+Severidad: mayor
+Por qué: el mismo problema de tipado aparece en abrirModalQuitarCancion: playlistId se usa como string y cancionId se convierte a número solo en parte de las comparaciones. El código es susceptible a errores si los tamaños o formatos de ID cambian.
+storage.js líneas 45-56
+
+Severidad: mayor
+Por qué: la rehidratación de playlists convierte fechas con new Date(...), pero no valida que las fechas resultantes sean válidas. Si el storage contiene valores mal formados, la app puede cargar playlists con fechas inválidas que luego se renderizan como NaN/NaN/NaN o comportamientos inesperados.
+```
+
+## 29/07/2026 — Pruebas manuales
+
+**Para qué:** Hacer pruebas la app.
+**Prompt:**
+
+```
+@workspace Dame una lista de pruebas manuales que realizare en mi app,
+priorizando en caso existan los siguientes casos borde:
+datos corruptos en localStorage, playlist vacía,
+búsqueda sin resultados, nombres duplicados o con espacios,
+recarga tras eliminar,etc.
+Formato: paso a paso + resultado esperado.
+```
+
+**Resultado:**
+```
+```

@@ -288,8 +288,27 @@
         aria-modal="true"
         aria-labelledby="titulo-datos-corruptos"
       >
-        <h3 id="titulo-datos-corruptos">
-          ⚠ Hubo un problema con tus datos guardados
+        <h3 id="titulo-datos-corruptos" class="modal-titulo-alerta">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-alert-triangle"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 9v4" />
+            <path
+              d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0"
+            />
+            <path d="M12 16h.01" />
+          </svg>
+          Hubo un problema con tus datos guardados
         </h3>
         <p class="modal-subtitulo">
           No pudimos leer tus playlists guardadas — puede que el archivo se haya
@@ -303,6 +322,45 @@
         </div>
       </div>
     </div>
+
+    <div id="overlay-recuperacion-parcial" class="overlay oculto">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-recuperacion-parcial"
+      >
+        <h3 id="titulo-recuperacion-parcial">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-alert-triangle"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 9v4" />
+            <path
+              d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0"
+            />
+            <path d="M12 16h.01" />
+          </svg>
+          Algunas playlists no se pudieron recuperar
+        </h3>
+        <p id="texto-recuperacion-parcial" class="modal-subtitulo"></p>
+        <div class="modal-acciones">
+          <button type="button" id="btn-entendido-recuperacion-parcial">
+            Entendido
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div id="toast" class="toast oculto" role="status" aria-live="polite"></div>
     <audio id="reproductor-preview" preload="none"></audio>
   </body>
