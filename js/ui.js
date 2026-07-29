@@ -73,6 +73,15 @@ const overlayDatosCorruptos = document.getElementById(
 const btnEmpezarDeCero = document.getElementById("btn-empezar-de-cero");
 const reproductorPreview = document.getElementById("reproductor-preview");
 const btnLimpiarBusqueda = document.getElementById("btn-limpiar-busqueda");
+const overlayRecuperacionParcial = document.getElementById(
+  "overlay-recuperacion-parcial",
+);
+const textoRecuperacionParcial = document.getElementById(
+  "texto-recuperacion-parcial",
+);
+const btnEntendidoRecuperacionParcial = document.getElementById(
+  "btn-entendido-recuperacion-parcial",
+);
 
 const ICONO_PLAY = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>`;
 
@@ -93,6 +102,7 @@ export function render(estado) {
   renderModalQuitarCancion(estado.modalConfirmarQuitarCancion);
   renderModalEliminarPlaylist(estado.modalConfirmarEliminarPlaylist);
   renderModalDatosCorruptos(estado.modalDatosCorruptos);
+  renderModalRecuperacionParcial(estado.modalRecuperacionParcial);
   renderTabs(estado.vistaActiva);
   renderEqMasthead(estado.busqueda.status);
   renderToast(estado.toast);
@@ -159,6 +169,20 @@ function renderResultados(resultados) {
 function renderToast({ mensaje }) {
   toast.textContent = mensaje ?? "";
   toast.classList.toggle("oculto", !mensaje);
+}
+
+function renderModalRecuperacionParcial({ abierto, descartadas, conservadas }) {
+  overlayRecuperacionParcial.classList.toggle("oculto", !abierto);
+  if (!abierto) return;
+
+  const textoDescartadas =
+    descartadas === 1
+      ? "1 playlist dañada"
+      : `${descartadas} playlists dañadas`;
+  const textoConservadas =
+    conservadas === 1 ? "1 playlist" : `${conservadas} playlists`;
+
+  textoRecuperacionParcial.textContent = `Detectamos ${textoDescartadas} en tus datos guardados y tuvimos que descartarla${descartadas === 1 ? "" : "s"}. Conservamos ${textoConservadas} en buen estado.`;
 }
 
 // Habilita/deshabilita el botón mientras el usuario escribe.
@@ -298,7 +322,7 @@ function renderModalAgregar(
   overlayAgregar.classList.toggle("oculto", !abierto);
   if (!abierto) return;
 
-  const cancion = resultados.find((c) => c.id === Number(cancionId));
+  const cancion = resultados.find((c) => c.id === cancionId);
   agregarSubtitulo.textContent = cancion
     ? `"${cancion.titulo}" — ${cancion.artista}`
     : "";
@@ -504,6 +528,13 @@ export function renderPlayer(estado) {
   const btnActivo = document.querySelector(
     `.btn-preview[data-cancion-id="${cancionId}"]`,
   );
+
+  if (!btnActivo) {
+    reproductorPreview.pause();
+    reproductorPreview.removeAttribute("src");
+    return;
+  }
+
   const previewUrl = btnActivo?.dataset.previewUrl;
 
   if (reproduciendo) {
@@ -555,4 +586,8 @@ export function inicializarLimpiarBusqueda(onLimpiar) {
     onLimpiar();
     inputBusqueda.focus();
   });
+}
+
+export function inicializarModalRecuperacionParcial(onCerrar) {
+  btnEntendidoRecuperacionParcial.addEventListener("click", onCerrar);
 }

@@ -27,6 +27,7 @@ import {
   pausarPreview,
   detenerPreview,
   limpiarBusqueda,
+  cerrarModalRecuperacionParcial,
 } from "./state.js";
 import {
   render,
@@ -41,6 +42,7 @@ import {
   renderPlayer,
   inicializarPreview,
   inicializarLimpiarBusqueda,
+  inicializarModalRecuperacionParcial,
 } from "./ui.js";
 import { guardarPlaylists } from "./storage.js";
 
@@ -161,6 +163,7 @@ function iniciar() {
     idBusquedaActual++;
     limpiarBusqueda();
   });
+  inicializarModalRecuperacionParcial(cerrarModalRecuperacionParcial);
 }
 
 iniciar();

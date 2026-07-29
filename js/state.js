@@ -1,17 +1,32 @@
 import { Playlist } from "./models/Playlist.js";
-import { cargarPlaylists } from "./storage.js";
+import {
+  cargarPlaylists,
+  guardarNavegacion,
+  cargarNavegacion,
+} from "./storage.js";
 
-const { playlists: playlistsIniciales, datosCorruptos } = cargarPlaylists();
+const {
+  playlists: playlistsIniciales,
+  datosCorruptos,
+  playlistsDescartadas,
+} = cargarPlaylists();
+
+const navegacionGuardada = cargarNavegacion();
+const playlistTodaviaExiste = playlistsIniciales.some(
+  (p) => p.id === navegacionGuardada.playlistSeleccionadaId,
+);
 
 let estado = {
   busqueda: { status: "idle", resultados: [], mensajeError: null },
   playlists: playlistsIniciales,
   modal: { tipo: null, error: null },
   modalAgregar: { abierto: false, cancionId: null, filtro: "" },
-  vistaActiva: "busqueda",
+  vistaActiva: navegacionGuardada.vistaActiva,
   toast: { mensaje: null },
   cancionPendiente: null,
-  playlistSeleccionadaId: null,
+  playlistSeleccionadaId: playlistTodaviaExiste
+    ? navegacionGuardada.playlistSeleccionadaId
+    : null,
   modalConfirmarQuitarCancion: {
     abierto: false,
     playlistId: null,
@@ -24,6 +39,11 @@ let estado = {
     playlistNombre: null,
   },
   modalDatosCorruptos: { abierto: datosCorruptos },
+  modalRecuperacionParcial: {
+    abierto: playlistsDescartadas > 0,
+    descartadas: playlistsDescartadas,
+    conservadas: playlistsIniciales.length,
+  },
   previewActivo: { cancionId: null, reproduciendo: false },
 };
 
@@ -38,6 +58,10 @@ export function getEstado() {
 
 export function suscribirse(listener) {
   listeners.push(listener);
+  return () => {
+    const indice = listeners.indexOf(listener);
+    if (indice !== -1) listeners.splice(indice, 1);
+  };
 }
 
 export function actualizarEstado(cambios) {
@@ -112,6 +136,7 @@ export function cambiarVista(vista) {
     detenerPreview();
   }
   actualizarEstado({ vistaActiva: vista });
+  persistirNavegacionActual();
 }
 
 export function mostrarToast(mensaje) {
@@ -124,7 +149,9 @@ export function mostrarToast(mensaje) {
 }
 
 export function abrirModalAgregar(cancionId) {
-  actualizarEstado({ modalAgregar: { abierto: true, cancionId, filtro: "" } });
+  actualizarEstado({
+    modalAgregar: { abierto: true, cancionId: Number(cancionId), filtro: "" },
+  });
 }
 
 export function cerrarModalAgregar() {
@@ -144,21 +171,20 @@ export function abrirModalNuevaPlaylistDesdeAgregar() {
   const cancion = estado.busqueda.resultados.find((c) => c.id === cancionId);
   actualizarEstado({
     modal: { tipo: "nueva-playlist", error: null },
-    modalAgregar: { abierto: false, cancionId: null },
+    modalAgregar: { abierto: false, cancionId: null, filtro: null },
     cancionPendiente: cancion ?? null,
   });
 }
 
 export function agregarCancionAPlaylist(cancionId, playlistId) {
-  const cancion = estado.busqueda.resultados.find(
-    (c) => c.id === Number(cancionId),
-  );
+  const idNumerico = Number(cancionId);
+  const cancion = estado.busqueda.resultados.find((c) => c.id === idNumerico);
   const playlist = estado.playlists.find((p) => p.id === playlistId);
 
   if (!cancion || !playlist) return;
 
   const yaEstaEnPlaylist = playlist.canciones.some(
-    (entrada) => entrada.cancion.id === Number(cancionId),
+    (entrada) => entrada.cancion.id === idNumerico,
   );
   if (yaEstaEnPlaylist) {
     actualizarEstado({
@@ -187,24 +213,25 @@ export function agregarCancionAPlaylist(cancionId, playlistId) {
 
 export function seleccionarPlaylist(playlistId) {
   actualizarEstado({ playlistSeleccionadaId: playlistId });
+  persistirNavegacionActual();
 }
 
 export function volverAListaPlaylists() {
   actualizarEstado({ playlistSeleccionadaId: null });
+  persistirNavegacionActual();
 }
 
 export function abrirModalQuitarCancion(playlistId, cancionId) {
+  const idNumerico = Number(cancionId);
   const playlist = estado.playlists.find((p) => p.id === playlistId);
-  const entrada = playlist?.canciones.find(
-    (e) => e.cancion.id === Number(cancionId),
-  );
+  const entrada = playlist?.canciones.find((e) => e.cancion.id === idNumerico);
   if (!entrada) return;
 
   actualizarEstado({
     modalConfirmarQuitarCancion: {
       abierto: true,
       playlistId,
-      cancionId: Number(cancionId),
+      cancionId: idNumerico,
       cancionTitulo: entrada.cancion.titulo,
     },
   });
@@ -285,6 +312,7 @@ export function confirmarEliminarPlaylist() {
       playlistNombre: null,
     },
   });
+  persistirNavegacionActual();
   mostrarToast(`✓ Playlist "${playlistNombre}" eliminada`);
 }
 
@@ -302,8 +330,22 @@ export function cerrarModalDatosCorruptos() {
   actualizarEstado({ modalDatosCorruptos: { abierto: false } });
 }
 
+export function cerrarModalRecuperacionParcial() {
+  actualizarEstado({
+    modalRecuperacionParcial: {
+      abierto: false,
+      descartadas: 0,
+      conservadas: 0,
+    },
+  });
+}
+
 export function suscribirsePreview(listener) {
   listenersPreview.push(listener);
+  return () => {
+    const indice = listenersPreview.indexOf(listener);
+    if (indice !== -1) listenersPreview.splice(indice, 1);
+  };
 }
 
 function actualizarPreview(cambios) {
@@ -331,4 +373,11 @@ export function limpiarBusqueda() {
     busqueda: { status: "idle", resultados: [], mensajeError: null },
   });
   detenerPreview();
+}
+
+function persistirNavegacionActual() {
+  guardarNavegacion({
+    vistaActiva: estado.vistaActiva,
+    playlistSeleccionadaId: estado.playlistSeleccionadaId,
+  });
 }
