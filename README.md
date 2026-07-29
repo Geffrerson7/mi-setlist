@@ -1,10 +1,38 @@
 # MI-SETLIST
 
+![Last Commit](https://img.shields.io/github/last-commit/Geffrerson7/mi-setlist)
+![License](https://img.shields.io/github/license/Geffrerson7/mi-setlist)
+![Live Demo](https://img.shields.io/website?url=https%3A%2F%2Fgeffrerson7.github.io%2Fmi-setlist%2F&label=demo)
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla%20ESM-f7df1e?logo=javascript&logoColor=black)
+
 Aplicación web para buscar canciones en el catálogo de iTunes y organizarlas en playlists personales que se guardan en tu navegador, sin necesidad de cuenta ni backend.
+
+## Tabla de contenidos
+
+- [Demo](#demo)
+- [Características](#características)
+- [Stack tecnológico](#stack-tecnológico)
+- [Historias de usuario](#historias-de-usuario)
+- [Cómo ejecutar el proyecto localmente](#cómo-ejecutar-el-proyecto-localmente)
+- [Estructura de archivos](#estructura-de-archivos)
 
 ## Demo
 
 🔗 [Ver la app en vivo](https://geffrerson7.github.io/mi-setlist/)
+
+## Características
+
+- 🔍 **Búsqueda en tiempo real** contra el catálogo de iTunes, con manejo de estados de carga, error y "sin resultados"
+- ▶️ **Previsualización de canciones** de 30 segundos directo desde los resultados de búsqueda
+- 🎵 **Playlists personales**: creación, renombrado implícito por unicidad de nombre, y eliminación con confirmación
+- ➕ **Agregar canciones** desde la búsqueda a una o varias playlists, con detección de duplicados
+- 🗑️ **Quitar canciones** de una playlist con confirmación previa
+- ↕️ **Ordenar canciones** dentro de una playlist (por fecha de agregado o alfabéticamente)
+- ⏱️ **Duración total** de cada playlist en formato legible
+- 📊 **Estadísticas por playlist**: cantidad de canciones, género más frecuente y artista más repetido
+- 💾 **Persistencia local** vía `localStorage`, sin backend ni cuenta de usuario
+- 🛡️ **Recuperación ante datos corruptos**: si el almacenamiento local se daña, la app se recupera sola sin dejar al usuario sin poder usarla
+- ⌨️ **Búsqueda más ágil**: botón para limpiar el campo de búsqueda con un clic
 
 ## Stack tecnológico
 
@@ -33,6 +61,11 @@ Aplicación web para buscar canciones en el catálogo de iTunes y organizarlas e
 - **HU-09** — Ver estadísticas de la playlist (género y artista más frecuentes)
 - **HU-10** — Ordenar canciones dentro de una playlist
 - **HU-11** — Recuperación ante datos corruptos
+
+### Sprint POST-MVP
+
+- **HU-12** — Previsualización de canciones
+- **HU-13** — Limpiar rápidamente el campo de búsqueda
 
 ## Cómo ejecutar el proyecto localmente
 
@@ -68,7 +101,9 @@ npx serve .
  │   ├── storage.js         # localStorage (guardar/cargar/limpiar)
  │   ├── api.js             # fetch a la API de iTunes
  │   └── ui.js              # render + eventos del DOM
+ ├── HISTORIAS.md           # Hidtorias de Usuario
  ├── PROMPTS.md             # Registro de trabajo con la IA
  ├── README.md              # Documentación del proyecto
+ ├── SPRINTS.md             # Sprints y dependencias del proyecto
  └── .gitignore
 ```
