@@ -17,7 +17,13 @@
 - HU-10: Ordenar canciones dentro de una playlist (se apoya en la vista de playlist ya completa, con duración y estadísticas visibles, para no tener que retocar esa pantalla dos veces).
 - HU-11: Recuperación ante datos corruptos (cierra el sprint a propósito: es la única historia que no depende del contenido de las playlists, sino de la robustez general de la persistencia, así que conviene probarla al final contra el mayor volumen de datos guardados posible).
 
+## Sprint 3 (Post-MVP) - Meta: mejorar la experiencia de búsqueda y enriquecer la interacción del usuario.
+
+- **HU-12: Previsualización de canciones** (se implementa una vez completado el MVP, agregando la posibilidad de escuchar una muestra de las canciones antes de incorporarlas a una playlist, sin afectar la lógica principal de la aplicación).
+- **HU-13: Limpiar rápidamente el campo de búsqueda** (completa la experiencia de búsqueda permitiendo reiniciar el formulario con un solo clic y volver rápidamente al estado inicial de búsqueda).
+
 ## Dependencias detectadas
+
 - Para HU-04 necesito antes HU-01 (y HU-02) porque no puedo agregar una canción que no viene de un resultado de búsqueda.
 - Para HU-04 necesito antes HU-03 porque no puedo elegir una playlist destino si todavía no existe ninguna.
 - Para HU-05 necesito antes HU-04 porque no hay contenido que mostrar en una playlist vacía por falta de canciones agregadas.
@@ -28,4 +34,5 @@
 - Para HU-11 necesito antes HU-06 porque solo puedo manejar datos corruptos si ya existe un mecanismo de guardado/restauración que pueda fallar.
 
 ## Mi reto técnico principal
+
 La HU que más me intimida es **HU-09 (Ver estadísticas de la playlist)** porque no es un cálculo directo como la duración total (HU-08): necesito agrupar canciones por género y por artista, contar ocurrencias, encontrar el máximo y decidir qué hacer ante empates de forma consistente cada vez que se re-renderiza. Es la primera historia donde el estado no se "recorre y suma", sino que hay que transformarlo en una estructura intermedia (conteos) antes de mostrar un resultado, y eso incrementa la posibilidad de bugs sutiles si el criterio de desempate no queda bien definido desde el principio.
