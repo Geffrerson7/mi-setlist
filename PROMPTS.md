@@ -987,7 +987,6 @@ R: Un ícono (✕) dentro del propio input, a la derecha del texto
 4. **app.js** — import + wiring en `iniciar()`
 5. **styles.css** — `.campo-busqueda`, ajuste a `#input-busqueda` dentro de ese contenedor, `.btn-limpiar-busqueda` y sus estados `:hover/:focus-visible`
 
-
 ## 29/07/2026 — Segunda Auditoría con Copilot
 
 **Para qué:** Encontrar bugs en el código.
@@ -1012,6 +1011,7 @@ Menores (pulido): se descartan. Hoy no hay tiempo para cosmética.
 ```
 
 **Resultado:**
+
 ```
 storage.js línea 16
 
@@ -1050,5 +1050,19 @@ Formato: paso a paso + resultado esperado.
 ```
 
 **Resultado:**
-```
-```
+
+1. **Datos corruptos en localStorage** — escribir un valor inválido en `mi-setlist:playlists`, recargar y verificar que la app no se rompe y muestra el modal de datos corruptos o arranca con playlists vacías.
+2. **Guardar / storage lleno o denegado** — simular fallo de `setItem`, esperar toast de aviso sin bloquear la UI en memoria.
+3. **Playlist vacía (vista detalle)** — crear playlist sin canciones, verificar mensaje de vacía, estadísticas ocultas, botón eliminar disponible.
+4. **Búsqueda sin resultados** — buscar un término improbable, verificar mensaje "No se encontraron resultados".
+5. **Nombres duplicados o con espacios** — crear " Mi Playlist " y luego "mi playlist", verificar validación trim + case-insensitive con error correspondiente.
+6. **Recarga tras eliminar playlist** — eliminar playlist con canciones, recargar, confirmar que no reaparece ni queda referenciada en `playlistSeleccionadaId`.
+7. **Agregar canción ya existente** — agregar la misma canción dos veces, verificar toast de duplicado sin entrada repetida.
+8. **Fechas: rehidratación y formato** — recargar tras crear playlist, verificar `fechaCreacion`/`fechaEdicion`/`fechaAgregado` en formato dd/mm/aaaa sin "Invalid Date".
+9. **IDs: consistencia DOM vs. estado** — verificar que abrir modal, reproducir preview y quitar canción funcionan sin fallos por comparaciones string/number.
+10. **Reproducción de preview: play/pause/ended** — verificar cambio de ícono ▶/⏸ y reseteo al terminar el audio.
+11. **Flujo "crear playlist desde agregar"** — verificar que la canción pendiente se agrega automáticamente a la playlist recién creada.
+12. **Modales: cierre al click fuera** — verificar cierre correcto sin efectos colaterales.
+13. **Estado de búsqueda concurrente (race conditions)** — lanzar dos búsquedas rápidas, verificar que solo se muestran los resultados de la última.
+14. **Accesibilidad: foco al abrir modal nueva playlist** — verificar foco automático en el input de nombre.
+15. **Borrar localStorage y reintento UI** — borrar la clave, recargar, crear playlist nueva y verificar persistencia sin residuos.
