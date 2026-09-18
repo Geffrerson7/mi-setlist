@@ -3,6 +3,7 @@ import {
   cargarPlaylists,
   guardarNavegacion,
   cargarNavegacion,
+  cargarBusqueda,
 } from "./storage.js";
 
 const {
@@ -16,8 +17,15 @@ const playlistTodaviaExiste = playlistsIniciales.some(
   (p) => p.id === navegacionGuardada.playlistSeleccionadaId,
 );
 
+const busquedaGuardada = cargarBusqueda();
+
 let estado = {
-  busqueda: { status: "idle", resultados: [], mensajeError: null },
+  busqueda: {
+    status: busquedaGuardada.resultados.length > 0 ? "success" : "idle",
+    resultados: busquedaGuardada.resultados,
+    mensajeError: null,
+  },
+  terminoBusqueda: busquedaGuardada.termino,
   playlists: playlistsIniciales,
   modal: { tipo: null, error: null },
   modalAgregar: { abierto: false, cancionId: null, filtro: "" },

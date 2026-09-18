@@ -4,6 +4,7 @@ import { Cancion } from "./models/Cancion.js";
 const CLAVE_STORAGE = "mi-setlist:playlists";
 const CLAVE_NAVEGACION = "mi-setlist:navegacion";
 const VISTAS_VALIDAS = ["busqueda", "playlists"];
+const CLAVE_BUSQUEDA = "mi-setlist:busqueda";
 
 export function guardarPlaylists(playlists) {
   try {
@@ -128,5 +129,46 @@ export function cargarNavegacion() {
     return { vistaActiva, playlistSeleccionadaId };
   } catch {
     return { vistaActiva: "busqueda", playlistSeleccionadaId: null };
+  }
+}
+
+export function guardarBusqueda({ termino, resultados }) {
+  try {
+    localStorage.setItem(
+      CLAVE_BUSQUEDA,
+      JSON.stringify({ termino, resultados }),
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function cargarBusqueda() {
+  try {
+    const crudo = localStorage.getItem(CLAVE_BUSQUEDA);
+    if (!crudo) return { termino: "", resultados: [] };
+
+    const datos = JSON.parse(crudo);
+    if (!Array.isArray(datos.resultados)) {
+      return { termino: "", resultados: [] };
+    }
+
+    // Igual que con las playlists: rehidratamos instancias reales de
+    // Cancion, no objetos planos, para que duracionFormateada exista.
+    const resultados = datos.resultados.map((item) => new Cancion({ ...item }));
+    const termino = typeof datos.termino === "string" ? datos.termino : "";
+
+    return { termino, resultados };
+  } catch {
+    return { termino: "", resultados: [] };
+  }
+}
+
+export function borrarBusqueda() {
+  try {
+    localStorage.removeItem(CLAVE_BUSQUEDA);
+  } catch {
+    // Si ni siquiera se puede borrar, no es grave: es solo caché de UX.
   }
 }

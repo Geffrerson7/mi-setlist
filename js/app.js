@@ -44,16 +44,22 @@ import {
   inicializarLimpiarBusqueda,
   inicializarModalRecuperacionParcial,
 } from "./ui.js";
-import { guardarPlaylists } from "./storage.js";
+import {
+  guardarPlaylists,
+  guardarBusqueda,
+  borrarBusqueda,
+} from "./storage.js";
 
 let idBusquedaActual = 0;
 let ultimasPlaylistsGuardadas = null;
+let ultimosResultadosGuardados = null;
 
 async function manejarBusqueda(termino) {
   const idDeEstaBusqueda = ++idBusquedaActual;
   detenerPreview();
 
   actualizarEstado({
+    terminoBusqueda: termino,
     busqueda: { status: "loading", resultados: [], mensajeError: null },
   });
 
@@ -110,12 +116,36 @@ function manejarTogglePreview(cancionId, opciones = {}) {
   }
 }
 
+function persistirBusqueda(estadoActual) {
+  const { resultados, status } = estadoActual.busqueda;
+
+  // Comparación por referencia: solo un cambio real produce un array
+  // nuevo (ver manejarBusqueda / limpiarBusqueda), así que evita
+  // escribir en localStorage en cada render que no tocó los resultados.
+  if (resultados === ultimosResultadosGuardados) return;
+  ultimosResultadosGuardados = resultados;
+
+  // El usuario limpió la búsqueda explícitamente (HU-13): borramos lo
+  // persistido para no resucitarla sola al recargar.
+  if (status === "idle") {
+    borrarBusqueda();
+    return;
+  }
+
+  // "loading" y "error" son transitorios de la sesión actual; no tiene
+  // sentido que sobrevivan a un F5.
+  if (status !== "success" && status !== "empty") return;
+
+  guardarBusqueda({ termino: estadoActual.terminoBusqueda, resultados });
+}
+
 function iniciar() {
   suscribirse(render);
   suscribirse(persistirPlaylists);
+  suscribirse(persistirBusqueda);
   suscribirsePreview(renderPlayer);
 
-  inicializarInputBusqueda();
+  inicializarInputBusqueda(getEstado().terminoBusqueda);
   inicializarFormularioBusqueda(manejarBusqueda);
   inicializarModalNuevaPlaylist({
     onAbrir: abrirModalNuevaPlaylist,
