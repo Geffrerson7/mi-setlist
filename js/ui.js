@@ -186,7 +186,10 @@ function renderModalRecuperacionParcial({ abierto, descartadas, conservadas }) {
 }
 
 // Habilita/deshabilita el botón mientras el usuario escribe.
-export function inicializarInputBusqueda() {
+export function inicializarInputBusqueda(terminoInicial = "") {
+  if (terminoInicial) {
+    inputBusqueda.value = terminoInicial;
+  }
   inputBusqueda.addEventListener("input", renderBotonBuscar);
   renderBotonBuscar();
 }
